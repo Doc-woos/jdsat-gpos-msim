@@ -1,0 +1,15 @@
+{
+  "rate_table": [
+    {
+      "entry_id": "replace-e4-to-e5-year-3",
+      "transition_type": "promotion",
+      "source_specialty": "0311",
+      "source_grade": "E4",
+      "target_specialty": "0369",
+      "target_grade": "E5",
+      "year_start": 3,
+      "year_end": 3,
+      "rate": 0.14
+    }
+  ]
+}

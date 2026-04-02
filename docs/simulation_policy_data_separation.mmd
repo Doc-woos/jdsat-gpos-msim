@@ -1,0 +1,22 @@
+flowchart TD
+    A[Authoritative or Scenario Data\ninventory\nauthorizations\nhistorical rates\ntraining capacity\npolicy inputs] --> B[Data Normalization Layer]
+
+    B --> C[Service Policy Layer\nUSMC-specific rules\npromotion logic\nretention assumptions\nloss categories\naccession policy]
+    B --> D[Career Network Configuration\nnodes\nedges\ntransition topology\nentry and exit structure]
+    B --> E[Scenario Assembly\nhorizon\nresolution\ndeterministic vs stochastic\ncomparison setup]
+
+    C --> F[MSim Domain Logic\nportable manpower algorithms\npolicy application\nflow calculations]
+    D --> F
+    E --> F
+
+    F --> G[Simulation Runtime\ngameplan.engine\nexecution orchestration\nstate updates]
+    F --> H[Graph Analysis\ngameplan.graph\nvalidation\nreachability\nbottlenecks]
+    F --> I[Analytics Layer\ngameplan.analytics\nsensitivity\noptimization\nstatistics]
+    B --> L[Data and Persistence Layer\ngameplan.data or repo-local adapters]
+
+    G --> J[Result Aggregation]
+    H --> J
+    I --> J
+    L --> J
+
+    J --> K[Product Outputs\nrepo-local APIs\nprojections\ncomparisons\nreadiness summaries\nexports\nAI-grounded explanations]

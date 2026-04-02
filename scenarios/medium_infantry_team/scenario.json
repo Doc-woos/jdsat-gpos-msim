@@ -1,0 +1,52 @@
+{
+  "scenario": {
+    "scenario_id": "medium-infantry-team",
+    "horizon_years": 3,
+    "processing_rule": "sequential_declared_order",
+    "metadata": {
+      "version": "0.2.0",
+      "label": "Medium Infantry Team",
+      "created_by": null,
+      "source": "decomposed-reference-fixture",
+      "notes": "Decomposed scenario fixture using manifest references and local policy adjustments."
+    },
+    "scenario_refs": {
+      "topology": "topology.json",
+      "inventory": "inventory.json",
+      "demand": "demand.json",
+      "rates": "rate_tables.json",
+      "accessions": "accession_tables.json"
+    },
+    "policy_overrides": {
+      "rate_overrides": [
+        {
+          "override_id": "increase-e3-promotion",
+          "transition_type": "promotion",
+          "source_specialty": "0311",
+          "source_grade": "E3",
+          "year_start": 2,
+          "year_end": 3,
+          "rate_multiplier": 1.1
+        }
+      ],
+      "accession_overrides": [
+        {
+          "override_id": "plus-one-e3-accession",
+          "target_specialty": "0311",
+          "target_grade": "E3",
+          "year_start": 2,
+          "year_end": 3,
+          "amount_delta": 1
+        }
+      ]
+    },
+    "scenario_adjustments": {
+      "inventory_deltas": [
+        {"cell_id": "0311-E4", "delta": 2}
+      ],
+      "demand_deltas": [
+        {"cell_id": "0369-E5", "delta": 1}
+      ]
+    }
+  }
+}

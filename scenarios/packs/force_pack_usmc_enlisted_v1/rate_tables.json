@@ -1,0 +1,108 @@
+{
+    "artifact_metadata":  {
+                              "artifact_id":  "rates_usmc_enlisted_v1",
+                              "pack_id":  "force_pack_usmc_enlisted_v1",
+                              "service":  "USMC"
+                          },
+    "rate_table":  [
+                       {
+                           "entry_id":  "cyber-promo-year-3",
+                           "transition_type":  "promotion",
+                           "source_specialty":  "1721",
+                           "source_grade":  "E4",
+                           "target_specialty":  "1721",
+                           "target_grade":  "E5",
+                           "year_start":  3,
+                           "year_end":  3,
+                           "rate":  0.16
+                       },
+                       {
+                           "entry_id":  "infantry-promo-year-3",
+                           "transition_type":  "promotion",
+                           "source_specialty":  "0311",
+                           "source_grade":  "E4",
+                           "target_specialty":  "0369",
+                           "target_grade":  "E5",
+                           "year_start":  3,
+                           "year_end":  3,
+                           "rate":  0.1
+                       },
+                       {
+                           "entry_id":  "cyber-promo-year-4-e5-e6",
+                           "transition_type":  "promotion",
+                           "source_specialty":  "1721",
+                           "source_grade":  "E5",
+                           "target_specialty":  "1721",
+                           "target_grade":  "E6",
+                           "year_start":  4,
+                           "year_end":  4,
+                           "rate":  0.14
+                       },
+                       {
+                           "entry_id":  "aviation-promo-year-3-e5-e6",
+                           "transition_type":  "promotion",
+                           "source_specialty":  "6174",
+                           "source_grade":  "E5",
+                           "target_specialty":  "6174",
+                           "target_grade":  "E6",
+                           "year_start":  3,
+                           "year_end":  4,
+                           "rate":  0.11
+                       },
+                       {
+                           "entry_id":  "comms-promo-year-2-e5-e6",
+                           "transition_type":  "promotion",
+                           "source_specialty":  "0621",
+                           "source_grade":  "E5",
+                           "target_specialty":  "0621",
+                           "target_grade":  "E6",
+                           "year_start":  2,
+                           "year_end":  3,
+                           "rate":  0.1
+                       },
+                       {
+                           "entry_id":  "motor-promo-year-4-e5-e6",
+                           "transition_type":  "promotion",
+                           "source_specialty":  "3531",
+                           "source_grade":  "E5",
+                           "target_specialty":  "3531",
+                           "target_grade":  "E6",
+                           "year_start":  4,
+                           "year_end":  4,
+                           "rate":  0.1
+                       },
+                       {
+                           "entry_id":  "infantry-promo-year-4-e6-e7",
+                           "transition_type":  "promotion",
+                           "source_specialty":  "0369",
+                           "source_grade":  "E6",
+                           "target_specialty":  "0369",
+                           "target_grade":  "E7",
+                           "year_start":  4,
+                           "year_end":  4,
+                           "rate":  0.07
+                       },
+                       {
+                           "entry_id":  "cyber-promo-year-4-e6-e7",
+                           "transition_type":  "promotion",
+                           "source_specialty":  "1721",
+                           "source_grade":  "E6",
+                           "target_specialty":  "1721",
+                           "target_grade":  "E7",
+                           "year_start":  4,
+                           "year_end":  4,
+                           "rate":  0.09
+                       },
+                       {
+                           "entry_id":  "aviation-promo-year-4-e6-e7",
+                           "transition_type":  "promotion",
+                           "source_specialty":  "6174",
+                           "source_grade":  "E6",
+                           "target_specialty":  "6174",
+                           "target_grade":  "E7",
+                           "year_start":  4,
+                           "year_end":  4,
+                           "rate":  0.08
+                       }
+                   ]
+}

@@ -1,0 +1,38 @@
+{
+    "scenario":  {
+                     "scenario_id":  "synthetic-enlisted-baseline",
+                     "horizon_years":  4,
+                     "processing_rule":  "phased_standard_v1",
+                     "metadata":  {
+                                      "version":  "0.3.0",
+                                      "label":  "Synthetic Enlisted Baseline",
+                                      "created_by":  null,
+                                      "source":  "synthetic-force-pack",
+                                      "notes":  "Shared synthetic force-pack baseline for early pack reuse validation."
+                                  },
+                     "scenario_refs":  {
+                                           "topology":  "../packs/force_pack_usmc_enlisted_v1/topology.json",
+                                           "inventory":  "../packs/force_pack_usmc_enlisted_v1/inventory_fy2028.json",
+                                           "demand":  "../packs/force_pack_usmc_enlisted_v1/demand_fy2028.json",
+                                           "rates":  "../packs/force_pack_usmc_enlisted_v1/rate_tables.json",
+                                           "accessions":  "../packs/force_pack_usmc_enlisted_v1/accession_tables.json",
+                                           "authorization":  "../packs/force_pack_usmc_enlisted_v1/authorization_fy2028.json"
+                                       },
+                     "policy_overrides":  {
+                                              "rate_overrides":  [
+
+                                                                 ],
+                                              "accession_overrides":  [
+
+                                                                      ]
+                                          },
+                     "scenario_adjustments":  {
+                                                  "inventory_deltas":  [
+
+                                                                       ],
+                                                  "demand_deltas":  [
+
+                                                                    ]
+                                              }
+                 }
+}

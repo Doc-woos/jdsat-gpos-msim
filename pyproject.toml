@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "msim"
+version = "0.1.0"
+description = "Standalone GamePlanOS-based manpower simulation MVP"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.104.0",
+    "pydantic>=2.5.0",
+    "uvicorn>=0.24.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["backend*"]

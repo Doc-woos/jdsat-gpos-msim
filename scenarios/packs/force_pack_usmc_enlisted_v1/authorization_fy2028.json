@@ -1,0 +1,30 @@
+{
+  "artifact_metadata": {
+    "artifact_id": "authorization_usmc_enlisted_fy2028_v1",
+    "pack_id": "force_pack_usmc_enlisted_v1",
+    "service": "USMC",
+    "snapshot": "FY2028",
+    "description": "Synthetic authorization snapshot kept distinct from demand for early readiness linkage work."
+  },
+  "authorization": [
+    {"cell_id": "0311-E3", "authorization": 600},
+    {"cell_id": "0311-E4", "authorization": 300},
+    {"cell_id": "0369-E5", "authorization": 120},
+    {"cell_id": "0369-E6", "authorization": 50},
+    {"cell_id": "1721-E4", "authorization": 46},
+    {"cell_id": "1721-E5", "authorization": 26},
+    {"cell_id": "3531-E4", "authorization": 95},
+    {"cell_id": "3531-E5", "authorization": 44},
+    {"cell_id": "6174-E4", "authorization": 100},
+    {"cell_id": "6174-E5", "authorization": 46},
+    {"cell_id": "0621-E4", "authorization": 92},
+    {"cell_id": "0621-E5", "authorization": 42},
+    {"cell_id": "0369-E7", "authorization": 22},
+    {"cell_id": "1721-E6", "authorization": 14},
+    {"cell_id": "3531-E6", "authorization": 20},
+    {"cell_id": "6174-E6", "authorization": 24},
+    {"cell_id": "0621-E6", "authorization": 21},
+    {"cell_id": "1721-E7", "authorization": 7},
+    {"cell_id": "6174-E7", "authorization": 10}
+  ]
+}

@@ -1,0 +1,72 @@
+{
+    "scenario":  {
+                     "scenario_id":  "synthetic-enlisted-cyber-push",
+                     "horizon_years":  4,
+                     "processing_rule":  "phased_standard_v1",
+                     "metadata":  {
+                                      "version":  "0.3.0",
+                                      "label":  "Synthetic Enlisted Cyber Push",
+                                      "created_by":  null,
+                                      "source":  "synthetic-force-pack",
+                                      "notes":  "Shared synthetic force-pack variant that shifts emphasis toward cyber accession and retention."
+                                  },
+                     "scenario_refs":  {
+                                           "topology":  "../packs/force_pack_usmc_enlisted_v1/topology.json",
+                                           "inventory":  "../packs/force_pack_usmc_enlisted_v1/inventory_fy2028.json",
+                                           "demand":  "../packs/force_pack_usmc_enlisted_v1/demand_fy2028.json",
+                                           "rates":  "../packs/force_pack_usmc_enlisted_v1/rate_tables.json",
+                                           "accessions":  "../packs/force_pack_usmc_enlisted_v1/accession_tables.json",
+                                           "authorization":  "../packs/force_pack_usmc_enlisted_v1/authorization_fy2028.json"
+                                       },
+                     "policy_overrides":  {
+                                              "rate_overrides":  [
+                                                                     {
+                                                                         "override_id":  "cyber-retention-push",
+                                                                         "transition_type":  "loss",
+                                                                         "source_specialty":  "1721",
+                                                                         "source_grade":  "E4",
+                                                                         "year_start":  1,
+                                                                         "year_end":  4,
+                                                                         "rate_multiplier":  0.75
+                                                                     },
+                                                                     {
+                                                                         "override_id":  "cyber-promotion-push",
+                                                                         "transition_type":  "promotion",
+                                                                         "source_specialty":  "1721",
+                                                                         "source_grade":  "E4",
+                                                                         "year_start":  1,
+                                                                         "year_end":  4,
+                                                                         "rate_multiplier":  1.2
+                                                                     }
+                                                                 ],
+                                              "accession_overrides":  [
+                                                                          {
+                                                                              "override_id":  "cyber-accession-plus-two",
+                                                                              "target_specialty":  "1721",
+                                                                              "target_grade":  "E4",
+                                                                              "year_start":  1,
+                                                                              "year_end":  4,
+                                                                              "amount_delta":  2
+                                                                          }
+                                                                      ]
+                                          },
+                     "scenario_adjustments":  {
+                                                  "inventory_deltas":  [
+                                                                           {
+                                                                               "cell_id":  "1721-E4",
+                                                                               "delta":  4
+                                                                           },
+                                                                           {
+                                                                               "cell_id":  "0311-E3",
+                                                                               "delta":  -6
+                                                                           }
+                                                                       ],
+                                                  "demand_deltas":  [
+                                                                        {
+                                                                            "cell_id":  "1721-E4",
+                                                                            "delta":  2
+                                                                        }
+                                                                    ]
+                                              }
+                 }
+}

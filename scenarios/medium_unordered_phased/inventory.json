@@ -1,0 +1,7 @@
+{
+  "inventory": [
+    {"cell_id": "0311-E3", "inventory": 100},
+    {"cell_id": "0311-E4", "inventory": 40},
+    {"cell_id": "0369-E5", "inventory": 10}
+  ]
+}

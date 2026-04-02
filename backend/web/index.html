@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSim Analyst Workbench</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div>
+          <p class="eyebrow">Prototype</p>
+          <h1 class="panel-title">MSim Analyst Workbench</h1>
+        </div>
+        <nav class="topbar-nav">
+          <a class="nav-pill" href="#run-panel"><span class="nav-mark">01</span>Run</a>
+          <a class="nav-pill" href="#compare-panel"><span class="nav-mark">02</span>Compare</a>
+          <a class="nav-pill" href="#projection-panel"><span class="nav-mark">03</span>Projection</a>
+          <a class="nav-pill" href="#library-panel"><span class="nav-mark">04</span>Library</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="shell page-stack">
+      <section class="panel hero-panel">
+        <div class="inline-spread">
+          <div>
+            <p class="eyebrow">Standalone GamePlanOS MVP</p>
+            <h2 class="page-title">Deterministic manpower projections with analyst-ready comparison, export, and local record history.</h2>
+            <p class="lede">
+              Run named scenarios, compare policy variants, inspect rule and policy drivers, export artifacts, and save reproducible records into a local workspace library.
+            </p>
+          </div>
+          <div class="powered-by-mark">
+            <span class="muted-label">Powered by</span>
+            <strong>GamePlanOS</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-grid">
+        <div class="summary-tile">
+          <span class="summary-value">2</span>
+          <span class="summary-label">Processing Rules</span>
+        </div>
+        <div class="summary-tile">
+          <span class="summary-value">4</span>
+          <span class="summary-label">Policy Inputs</span>
+        </div>
+        <div class="summary-tile">
+          <span class="summary-value">3</span>
+          <span class="summary-label">Saved Record Types</span>
+        </div>
+      </section>
+
+      <section class="panel stack">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Exports</p>
+            <h2 class="panel-title">Export Catalog</h2>
+          </div>
+          <span class="status-badge status-ready">Artifact Guide</span>
+        </div>
+        <div id="export-catalog" class="reference-grid empty">Loading export catalog...</div>
+      </section>
+
+      <section class="panel stack">
+        <div>
+          <p class="eyebrow">Reference Basis</p>
+          <h2 class="panel-title">Operational context behind the prototype</h2>
+          <p class="page-copy">
+            The current analyst workbench is shaped around deterministic force projection, explicit semantic checkpoints, and reproducible policy comparison so early manpower decisions can be reviewed without hidden execution assumptions.
+          </p>
+        </div>
+        <div class="reference-grid">
+          <article class="card reference-card">
+            <p class="eyebrow">Reference</p>
+            <h3 class="reference-title">Sequential Baseline</h3>
+            <p class="page-copy">Default execution remains keyed to ADR-0001 so unnamed scenarios preserve the original restartable semantic baseline.</p>
+          </article>
+          <article class="card reference-card">
+            <p class="eyebrow">Reference</p>
+            <h3 class="reference-title">Policy Variants</h3>
+            <p class="page-copy">Rate tables, rate overrides, accession tables, and accession overrides allow bounded policy experiments without inventing a new subsystem.</p>
+          </article>
+          <article class="card reference-card">
+            <p class="eyebrow">Reference</p>
+            <h3 class="reference-title">Analyst Traceability</h3>
+            <p class="page-copy">Fingerprints, checkpoint references, export artifacts, and local saved records make runs explainable and reproducible.</p>
+          </article>
+          <article class="card reference-card">
+            <p class="eyebrow">Reference</p>
+            <h3 class="reference-title">GamePlanOS Foundation</h3>
+            <p class="page-copy">The app stays portable by composing with GamePlanOS capabilities while keeping manpower-specific logic local to this repo.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="panel card workflow-card">
+          <p class="eyebrow">Step</p>
+          <h2 class="panel-title">Select a scenario</h2>
+          <p class="page-copy">Choose a labeled baseline or policy variant from the catalog and inspect the scenario note before you run it.</p>
+        </article>
+        <article class="panel card workflow-card">
+          <p class="eyebrow">Step</p>
+          <h2 class="panel-title">Compare policy effects</h2>
+          <p class="page-copy">Run baseline-versus-variant comparisons to expose rule changes, policy deltas, and the strongest cell-level drivers.</p>
+        </article>
+        <article class="panel card workflow-card">
+          <p class="eyebrow">Step</p>
+          <h2 class="panel-title">Export and save</h2>
+          <p class="page-copy">Download JSON or CSV artifacts, then save the scenario, run, or comparison into the local workspace library.</p>
+        </article>
+      </section>
+
+      <div class="workflow-grid">
+        <section id="run-panel" class="panel stack control-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Projection</p>
+              <h2 class="panel-title">Run Scenario</h2>
+            </div>
+            <button id="refresh-scenarios" class="button-secondary" type="button">Refresh</button>
+          </div>
+          <div class="panel-band">
+            <span class="section-token">01</span>
+            <p class="page-copy compact-copy">Load a named scenario, inspect its note, then run and save a reproducible projection.</p>
+          </div>
+          <label class="field">
+            <span class="field-label">Named Scenario</span>
+            <select id="run-scenario-select"></select>
+          </label>
+          <p id="run-catalog-note" class="page-copy">Loading scenario catalog...</p>
+          <div class="button-row">
+            <button id="run-scenario" class="button-primary" type="button">Run Projection</button>
+            <button id="save-scenario" class="button-secondary" type="button">Save Scenario</button>
+            <button id="save-run" class="button-secondary" type="button">Save Run</button>
+            <button id="export-projection-json" class="button-secondary" type="button">Export JSON</button>
+            <button id="export-projection-csv" class="button-secondary" type="button">Export CSV</button>
+            <button id="export-projection-summary-csv" class="button-secondary" type="button">Export Summary CSV</button>
+          </div>
+          <p class="export-note">Projection CSV exports include grouped fill and readiness sections when pack-backed context is available.</p>
+          <p id="run-status" class="status-badge status-working" aria-live="polite">Loading scenarios...</p>
+        </section>
+
+        <section id="compare-panel" class="panel stack control-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Comparison</p>
+              <h2 class="panel-title">Compare Scenarios</h2>
+            </div>
+            <span class="status-badge status-ready">Baseline vs Variant</span>
+          </div>
+          <div class="panel-band">
+            <span class="section-token">02</span>
+            <p class="page-copy compact-copy">Use paired named fixtures to explain which policy changes produced the biggest manpower shifts.</p>
+          </div>
+          <label class="field">
+            <span class="field-label">Baseline</span>
+            <select id="compare-baseline-select"></select>
+          </label>
+          <label class="field">
+            <span class="field-label">Variant</span>
+            <select id="compare-variant-select"></select>
+          </label>
+          <p id="compare-catalog-note" class="page-copy">Pick two named fixtures to compare.</p>
+          <div class="button-row">
+            <button id="run-comparison" class="button-primary" type="button">Run Comparison</button>
+            <button id="save-comparison" class="button-secondary" type="button">Save Comparison</button>
+            <button id="export-comparison-json" class="button-secondary" type="button">Export JSON</button>
+            <button id="export-comparison-csv" class="button-secondary" type="button">Export CSV</button>
+            <button id="export-comparison-summary-csv" class="button-secondary" type="button">Export Summary CSV</button>
+          </div>
+          <p class="export-note">Comparison CSV exports include grouped deltas plus baseline and variant fill/readiness sections when pack-backed context is available.</p>
+          <p id="compare-status" class="status-badge status-idle" aria-live="polite">Choose two named scenarios to compare.</p>
+        </section>
+      </div>
+
+      <section id="projection-panel" class="panel stack">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Result</p>
+            <h2 class="panel-title">Projection Result</h2>
+          </div>
+          <span id="projection-title" class="muted">No run yet</span>
+        </div>
+        <div class="summary-grid" id="projection-metrics"></div>
+        <div id="projection-export-summary" class="export-summary empty">Run a scenario to see which grouped sections projection CSV export will include.</div>
+        <div id="projection-insights" class="insight-grid empty">Run a scenario to inspect grade, specialty, shortage, and overage summaries.</div>
+        <div class="preview-grid">
+          <div class="card result-card">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">Inventory</p>
+                <h3 class="panel-title">Projected Inventory</h3>
+              </div>
+            </div>
+            <div id="projection-table" class="table-wrap empty">Run a scenario to inspect cells.</div>
+          </div>
+          <div class="card result-card">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">Metadata</p>
+                <h3 class="panel-title">Run Metadata</h3>
+              </div>
+            </div>
+            <dl id="projection-meta" class="meta-list empty"></dl>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel stack">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Result</p>
+            <h2 class="panel-title">Comparison Result</h2>
+          </div>
+          <span id="comparison-title" class="muted">No comparison yet</span>
+        </div>
+        <div class="summary-grid" id="comparison-metrics"></div>
+        <div id="comparison-export-summary" class="export-summary empty">Run a comparison to see which grouped sections comparison CSV export will include.</div>
+        <div id="comparison-insights" class="insight-grid empty">Run a comparison to inspect gains, losses, gap shifts, and rule differences.</div>
+        <div class="preview-grid">
+          <div class="card result-card">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">Cell Deltas</p>
+                <h3 class="panel-title">Top Cell Deltas</h3>
+              </div>
+            </div>
+            <div id="comparison-table" class="table-wrap empty">Run a comparison to inspect deltas.</div>
+          </div>
+          <div class="card result-card">
+            <div class="card-heading">
+              <div>
+                <p class="eyebrow">Drivers</p>
+                <h3 class="panel-title">Highlights and Drivers</h3>
+              </div>
+            </div>
+            <div id="comparison-highlights" class="highlight-list empty"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="library-panel" class="panel stack">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Workspace</p>
+            <h2 class="panel-title">Saved Library</h2>
+          </div>
+          <button id="refresh-library" class="button-secondary" type="button">Refresh Library</button>
+        </div>
+        <div id="library-summary" class="summary-grid compact-summary empty">Refresh the library to inspect saved scenario, run, and comparison counts.</div>
+        <div id="library-table" class="table-wrap empty">No saved records yet.</div>
+      </section>
+    </main>
+  </div>
+
+  <template id="metric-card-template">
+    <article class="summary-tile">
+      <span class="summary-label metric-label"></span>
+      <strong class="summary-value metric-value"></strong>
+    </article>
+  </template>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
+

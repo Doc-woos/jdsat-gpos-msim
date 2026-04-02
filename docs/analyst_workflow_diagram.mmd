@@ -1,0 +1,91 @@
+flowchart TD
+    A[Analyst Starts Question\nWhat force outcome or policy issue\nneeds to be understood?] --> B[Choose Analysis Mode\nBaseline projection\nPolicy comparison\nReadiness analysis\nOptimization question\nWhat-if exploration]
+
+    B --> C[Assemble Scenario Inputs]
+
+    C --> C1[Load baseline force structure\nauthorizations\nbillets\ndemand targets]
+    C --> C2[Load workforce state\ninventory by specialty and grade\nhistorical rates\ncurrent assumptions]
+    C --> C3[Load policy package\npromotion rules\nretention assumptions\naccessions\nlateral entry\nincentives]
+    C --> C4[Choose time horizon and resolution\nannual or monthly\ndeterministic or stochastic]
+
+    C1 --> D[Validate and Normalize Scenario]
+    C2 --> D
+    C3 --> D
+    C4 --> D
+
+    D --> D1{Scenario valid?}
+    D1 -->|No| D2[Return validation issues\nmissing references\ninvalid policy windows\nconflicting assumptions]
+    D2 --> C
+    D1 -->|Yes| E[Build Career Network]
+
+    E --> E1[Construct graph nodes\nspecialty-grade career cells\ntraining nodes\nentry and exit nodes]
+    E --> E2[Construct graph edges\npromotion\nlateral move\nretention\nloss\naccession\ntraining transitions]
+    E --> E3[Run graph checks\nmissing paths\ninvalid topology\ncycles where prohibited\nbottlenecks]
+
+    E1 --> F[Prepare Simulation Context]
+    E2 --> F
+    E3 --> F
+
+    F --> F1[Attach policy tables and overrides]
+    F --> F2[Attach force structure demand and billet context]
+    F --> F3[Attach training capacity assumptions]
+    F --> F4[Select execution scale\ncurrent repo: deterministic cohort-style flow\nfuture: Monte Carlo\nfuture: agent simulation\nfuture: optimization model]
+
+    F1 --> G[Execute Analysis]
+    F2 --> G
+    F3 --> G
+    F4 --> G
+
+    G --> G1[Run deterministic projection]
+    G --> G2[Run comparison\nbaseline vs variant]
+    G --> G3[Run Monte Carlo\nif uncertainty needed]
+    G --> G4[Run sensitivity analysis\nif lever prioritization needed]
+    G --> G5[Run optimization\nif target outcome and constraints are defined]
+
+    G1 --> H[Aggregate Outputs]
+    G2 --> H
+    G3 --> H
+    G4 --> H
+    G5 --> H
+
+    H --> H1[Inventory outputs\nby specialty\nby grade\nby year]
+    H --> H2[Gap outputs\ninventory vs demand\ninventory vs authorization]
+    H --> H3[Flow outputs\naccessions\npromotions\nlosses\nlateral moves\ntraining throughput]
+    H --> H4[Risk outputs\nshortages\nbottlenecks\nreadiness impacts\ncapability concerns]
+    H --> H5[Decision outputs\npolicy deltas\nsensitivity ranking\noptimization recommendations]
+
+    H1 --> I[Analyst Review Layer]
+    H2 --> I
+    H3 --> I
+    H4 --> I
+    H5 --> I
+
+    I --> I1[Inspect dashboards and tables]
+    I --> I2[Inspect comparison narratives\nrule changes\npolicy deltas\nkey drivers]
+    I --> I3[Inspect uncertainty bands\nand confidence limits]
+    I --> I4[Inspect readiness and billet effects]
+    I --> I5[Optionally ask AI-guided what-if questions\nagainst grounded simulation tools]
+
+    I1 --> J{Enough confidence to brief\nor decide?}
+    I2 --> J
+    I3 --> J
+    I4 --> J
+    I5 --> J
+
+    J -->|No| K[Refine assumptions or scenario]
+    K --> C
+
+    J -->|Yes| L[Produce Decision Artifact]
+
+    L --> L1[Export run or comparison artifacts]
+    L --> L2[Save scenario and results\nwith provenance metadata]
+    L --> L3[Prepare analyst summary\nforce outcome\npolicy tradeoffs\nrisks\nrecommendation]
+
+    L1 --> M[Decision Support Output]
+    L2 --> M
+    L3 --> M
+
+    M --> M1[Planner review]
+    M --> M2[Leadership brief]
+    M --> M3[Further policy iteration]
+    M --> M4[Input to readiness\ntraining\nor operational analysis]

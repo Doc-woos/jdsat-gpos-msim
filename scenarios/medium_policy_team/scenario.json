@@ -1,0 +1,57 @@
+{
+  "scenario": {
+    "scenario_id": "medium-policy-team",
+    "horizon_years": 2,
+    "processing_rule": "sequential_declared_order",
+    "metadata": {
+      "version": "0.2.0",
+      "label": "Medium Policy Team",
+      "created_by": null,
+      "source": "decomposed-policy-fixture",
+      "notes": "Decomposed medium scenario with rate and accession overrides applied after baseline artifact expansion."
+    },
+    "scenario_refs": {
+      "topology": "topology.json",
+      "inventory": "inventory.json",
+      "demand": "demand.json",
+      "rates": "rate_tables.json",
+      "accessions": "accession_tables.json"
+    },
+    "policy_overrides": {
+      "rate_overrides": [
+        {
+          "override_id": "boost-junior-promotion",
+          "transition_type": "promotion",
+          "source_specialty": "0311",
+          "source_grade": "E3",
+          "year_start": 1,
+          "year_end": 2,
+          "rate_multiplier": 1.5
+        },
+        {
+          "override_id": "reduce-junior-loss",
+          "transition_type": "loss",
+          "source_specialty": "0311",
+          "source_grade": "E3",
+          "year_start": 1,
+          "year_end": 2,
+          "rate_multiplier": 0.5
+        }
+      ],
+      "accession_overrides": [
+        {
+          "override_id": "plus-two-e3-accession",
+          "target_specialty": "0311",
+          "target_grade": "E3",
+          "year_start": 1,
+          "year_end": 2,
+          "amount_delta": 2
+        }
+      ]
+    },
+    "scenario_adjustments": {
+      "inventory_deltas": [],
+      "demand_deltas": []
+    }
+  }
+}

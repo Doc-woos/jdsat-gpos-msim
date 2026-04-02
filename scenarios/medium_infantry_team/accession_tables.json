@@ -1,0 +1,12 @@
+{
+  "accession_table": [
+    {
+      "entry_id": "replace-e3-accession-year-3",
+      "target_specialty": "0311",
+      "target_grade": "E3",
+      "year_start": 3,
+      "year_end": 3,
+      "amount": 14
+    }
+  ]
+}

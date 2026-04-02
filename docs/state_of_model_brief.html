@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MSim State Of The Model Brief</title>
+  <style>
+    :root {
+      --bg: #f2efe8;
+      --paper: #fffdf8;
+      --ink: #182126;
+      --muted: #5a6770;
+      --line: #d8d0c3;
+      --accent: #0f5c4d;
+      --accent-2: #a4492a;
+      --wash: #e6efe9;
+      --shadow: 0 18px 48px rgba(24, 33, 38, 0.10);
+      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      --sans: "Segoe UI", "Aptos", "Trebuchet MS", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(164, 73, 42, 0.10), transparent 32%),
+        radial-gradient(circle at top right, rgba(15, 92, 77, 0.12), transparent 30%),
+        linear-gradient(180deg, #f7f3eb 0%, var(--bg) 100%);
+      line-height: 1.5;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 24px auto 56px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(15, 92, 77, 0.96), rgba(14, 38, 47, 0.96));
+      color: #f9f7f2;
+      border-radius: 28px;
+      padding: 40px 36px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -120px -120px auto;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.14), transparent 65%);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 0.86rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(249, 247, 242, 0.72);
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 700;
+      line-height: 1.05;
+    }
+
+    h1 {
+      font-size: clamp(2.3rem, 5vw, 4.8rem);
+      max-width: 9ch;
+    }
+
+    .hero p {
+      max-width: 58rem;
+      font-size: 1.05rem;
+      margin: 18px 0 0;
+      color: rgba(249, 247, 242, 0.9);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 28px;
+      align-items: end;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 18px 18px 16px;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero-card p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .section {
+      margin-top: 26px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+    }
+
+    .section-header p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 48rem;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: #fbf8f2;
+      font-size: 0.92rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      background: linear-gradient(180deg, #fffdf9 0%, #fbf7ef 100%);
+    }
+
+    .card h3 {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    ul, ol {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    li + li { margin-top: 8px; }
+
+    .visual {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .visual-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--wash);
+    }
+
+    .visual-header h3 {
+      font-size: 1.15rem;
+    }
+
+    .visual-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: white;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    .callout {
+      background: linear-gradient(180deg, rgba(15, 92, 77, 0.08), rgba(164, 73, 42, 0.08));
+      border: 1px solid rgba(15, 92, 77, 0.18);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .callout strong {
+      color: var(--accent);
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-size: 0.88rem;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .accent {
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .grid.two,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .section-header {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">MSim • 2026-03-27</p>
+          <h1>State Of The Model</h1>
+          <p>
+            The current model is best understood as a <span class="accent">grouped manpower projection and comparison model with an early readiness proxy</span>.
+            It is analyst-usable now, but it is not yet billet-level readiness modeling.
+          </p>
+          <div class="chips">
+            <span class="chip">Shared `gameplan.domains.manpower` seam</span>
+            <span class="chip">Named pack-backed scenarios</span>
+            <span class="chip">Grouped fill and readiness outputs</span>
+            <span class="chip">Compact analyst export paths</span>
+          </div>
+        </div>
+        <aside class="hero-card">
+          <strong>Current Recommendation</strong>
+          <p>Keep billet-level modeling out for now. Deepen analyst reporting and interpretation on top of grouped authorization, fill, and readiness semantics before locking in a new billet schema.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <h2>What Is Real Now</h2>
+        </div>
+        <p>The app has moved beyond a toy MVP. It now has a stable shared-domain seam, reusable synthetic force packs, grouped analyst reporting, and portable export artifacts.</p>
+      </div>
+      <div class="grid two">
+        <article class="card">
+          <h3>Implemented</h3>
+          <ul>
+            <li>Deterministic projection and baseline-vs-variant comparison.</li>
+            <li>Shared neutral manpower algorithms through `gameplan.domains.manpower`.</li>
+            <li>Named scenarios, decomposed manifests, and reusable synthetic force packs.</li>
+            <li>Grouped rollups by `occfld`, `community`, and `force_element`.</li>
+            <li>Grouped authorization/fill summaries and readiness pressure signals.</li>
+            <li>Full and compact exports that preserve grouped analyst context.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Not Implemented Yet</h3>
+          <ul>
+            <li>Billet-level structures, unit-position mapping, or billet fill by position.</li>
+            <li>Training pipeline throughput and washout modeling.</li>
+            <li>Monte Carlo, sensitivity, or optimization workflows.</li>
+            <li>Officer, warrant, or cross-service generalization.</li>
+            <li>Operational and budget integration.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <h2>Visual Read</h2>
+        </div>
+        <p>These visuals anchor the current story and keep the distinction between today’s grouped model and the longer readiness target visible.</p>
+      </div>
+      <div class="grid two">
+        <article class="visual">
+          <div class="visual-header">
+            <h3>Force Analytics Flow</h3>
+            <p>Top-level story from scenario assembly through projection, comparison, and analyst decision support.</p>
+          </div>
+          <img src="force_analytics_flow.svg" alt="Force Analytics Flow diagram">
+        </article>
+        <article class="visual">
+          <div class="visual-header">
+            <h3>Simulation / Policy / Data Separation</h3>
+            <p>The critical seam: neutral shared algorithms in GamePlanOS, app-local summaries and product behavior here.</p>
+          </div>
+          <img src="simulation_policy_data_separation.svg" alt="Simulation policy data separation diagram">
+        </article>
+        <article class="visual">
+          <div class="visual-header">
+            <h3>Readiness Linkage</h3>
+            <p>The destination view. The repo currently implements only the first bridge into this space through grouped fill and readiness pressure outputs.</p>
+          </div>
+          <img src="readiness_linkage_diagram.svg" alt="Readiness linkage diagram">
+        </article>
+        <article class="visual">
+          <div class="visual-header">
+            <h3>Analyst Workflow</h3>
+            <p>The current user-facing frame: load a scenario, run or compare it, inspect grouped outputs, and export a portable brief.</p>
+          </div>
+          <img src="analyst_workflow_diagram.svg" alt="Analyst workflow diagram">
+        </article>
+      </div>
+    </section>
+
+    <section class="section split">
+      <div>
+        <div class="section-header">
+          <div>
+            <h2>Current Model Semantics</h2>
+          </div>
+          <p>The right way to describe the present state is important because the visuals point beyond what is actually implemented.</p>
+        </div>
+        <div class="card">
+          <h3>Current Contract</h3>
+          <ol>
+            <li>The model projects inventory and compares baseline vs variant scenarios.</li>
+            <li>Pack-backed scenarios add group context for `occfld`, `community`, and `force_element`.</li>
+            <li>That group context enables grouped inventory/demand rollups, grouped fill summaries, and grouped readiness pressure signals.</li>
+            <li>Authorization artifacts are preferred when present; demand can act as a fallback proxy.</li>
+            <li>The API and exports expose `authorization_basis` so analysts can see which semantic basis was used.</li>
+          </ol>
+        </div>
+      </div>
+      <aside class="callout">
+        <strong>Important Constraint</strong>
+        <p>This is a grouped readiness proxy only. It does not yet map inventory to explicit billets, positions, or unit-level vacancy structures.</p>
+        <p class="footer-note">That distinction should remain explicit in every external brief and demo until billet-level inputs actually exist.</p>
+      </aside>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <h2>Recommended Next Move</h2>
+        </div>
+        <p>The next high-value work is still analyst-facing depth, not another data-model jump.</p>
+      </div>
+      <div class="grid two">
+        <article class="card">
+          <h3>Recommendation</h3>
+          <ol>
+            <li>Keep billet-level modeling out for now.</li>
+            <li>Treat grouped authorization, fill, and readiness semantics as the active analyst contract.</li>
+            <li>Improve explanation, reporting, and handoff artifacts on top of that contract.</li>
+            <li>Only then decide whether a billet-level schema is concrete enough to lock in.</li>
+          </ol>
+        </article>
+        <article class="card">
+          <h3>Restart References</h3>
+          <ul>
+            <li>`docs/session_handoff.md`</li>
+            <li>`docs/checkpoints/2026-03-27-m3-grouped-readiness-and-export-handoff.md`</li>
+            <li>`docs/roadmap.md`</li>
+            <li>`docs/backlog.md`</li>
+          </ul>
+          <p class="footer-note">Verification baseline: `python -m pytest tests -q` -> `87 passed`.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

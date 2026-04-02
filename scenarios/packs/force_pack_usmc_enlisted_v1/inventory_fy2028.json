@@ -1,0 +1,86 @@
+{
+    "artifact_metadata":  {
+                              "artifact_id":  "inventory_usmc_enlisted_fy2028_v1",
+                              "pack_id":  "force_pack_usmc_enlisted_v1",
+                              "service":  "USMC",
+                              "snapshot":  "FY2028"
+                          },
+    "inventory":  [
+                      {
+                          "cell_id":  "0311-E3",
+                          "inventory":  620
+                      },
+                      {
+                          "cell_id":  "0311-E4",
+                          "inventory":  280
+                      },
+                      {
+                          "cell_id":  "0369-E5",
+                          "inventory":  110
+                      },
+                      {
+                          "cell_id":  "0369-E6",
+                          "inventory":  48
+                      },
+                      {
+                          "cell_id":  "1721-E4",
+                          "inventory":  38
+                      },
+                      {
+                          "cell_id":  "1721-E5",
+                          "inventory":  20
+                      },
+                      {
+                          "cell_id":  "3531-E4",
+                          "inventory":  90
+                      },
+                      {
+                          "cell_id":  "3531-E5",
+                          "inventory":  42
+                      },
+                      {
+                          "cell_id":  "6174-E4",
+                          "inventory":  96
+                      },
+                      {
+                          "cell_id":  "6174-E5",
+                          "inventory":  44
+                      },
+                      {
+                          "cell_id":  "0621-E4",
+                          "inventory":  88
+                      },
+                      {
+                          "cell_id":  "0621-E5",
+                          "inventory":  40
+                      },
+                      {
+                          "cell_id":  "0369-E7",
+                          "inventory":  20
+                      },
+                      {
+                          "cell_id":  "1721-E6",
+                          "inventory":  10
+                      },
+                      {
+                          "cell_id":  "3531-E6",
+                          "inventory":  18
+                      },
+                      {
+                          "cell_id":  "6174-E6",
+                          "inventory":  22
+                      },
+                      {
+                          "cell_id":  "0621-E6",
+                          "inventory":  19
+                      },
+                      {
+                          "cell_id":  "1721-E7",
+                          "inventory":  5
+                      },
+                      {
+                          "cell_id":  "6174-E7",
+                          "inventory":  8
+                      }
+                  ]
+}

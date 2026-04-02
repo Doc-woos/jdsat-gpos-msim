@@ -1,0 +1,30 @@
+flowchart LR
+    A[Projected Inventory\nby specialty\nby grade\nby year] --> B[Map Inventory to Billets]
+    C[Force Structure Demand\nauthorizations\nunit billets\nrequired skills] --> B
+
+    B --> D[Billet Fill Results\nfilled\nunfilled\nmismatched skill or grade]
+    D --> E[Unit Manning Picture]
+
+    E --> E1[Critical shortages]
+    E --> E2[Leadership gaps]
+    E --> E3[Special skill shortages]
+    E --> E4[Overages or misalignment]
+
+    E1 --> F[Readiness Assessment]
+    E2 --> F
+    E3 --> F
+    E4 --> F
+
+    G[Training Pipeline Output\nnew qualified personnel\nreclassification throughput] --> E
+    H[Retention and Loss Dynamics] --> E
+    I[Assignment Policy\nfill priorities\ndeployment sourcing rules] --> E
+
+    F --> J[Capability Effects\nunit can perform\nunit degraded\nunit unavailable\nrisk increased]
+    J --> J2[Operational Demand Context\ntheater requirements\nmission assumptions\nforce generation pressure]
+    J2 --> K[Decision Support]
+
+    K --> K1[Change accession targets]
+    K --> K2[Adjust retention incentives]
+    K --> K3[Shift assignment priorities]
+    K --> K4[Expand training capacity]
+    K --> K5[Accept risk and document tradeoff]

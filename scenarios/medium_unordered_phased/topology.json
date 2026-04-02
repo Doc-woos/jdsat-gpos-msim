@@ -1,0 +1,15 @@
+{
+  "career_cells": [
+    {"cell_id": "0311-E3", "specialty": "0311", "grade": "E3"},
+    {"cell_id": "0311-E4", "specialty": "0311", "grade": "E4"},
+    {"cell_id": "0369-E5", "specialty": "0369", "grade": "E5"}
+  ],
+  "transitions": [
+    {"transition_id": "loss-0311-e3", "transition_type": "loss", "source_cell_id": "0311-E3", "rate": 0.05},
+    {"transition_id": "loss-0311-e4", "transition_type": "loss", "source_cell_id": "0311-E4", "rate": 0.05},
+    {"transition_id": "loss-0369-e5", "transition_type": "loss", "source_cell_id": "0369-E5", "rate": 0.05},
+    {"transition_id": "prom-0311-e3-e4", "transition_type": "promotion", "source_cell_id": "0311-E3", "target_cell_id": "0311-E4", "rate": 0.1},
+    {"transition_id": "prom-0311-e4-0369-e5", "transition_type": "promotion", "source_cell_id": "0311-E4", "target_cell_id": "0369-E5", "rate": 0.1},
+    {"transition_id": "acc-0311-e3", "transition_type": "accession", "target_cell_id": "0311-E3", "amount": 12}
+  ]
+}

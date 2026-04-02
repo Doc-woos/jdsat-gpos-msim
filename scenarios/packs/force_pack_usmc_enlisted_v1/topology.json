@@ -1,0 +1,449 @@
+{
+    "artifact_metadata":  {
+                              "artifact_id":  "topology_usmc_enlisted_v1",
+                              "pack_id":  "force_pack_usmc_enlisted_v1",
+                              "service":  "USMC",
+                              "description":  "Synthetic enlisted topology scaffold for early force-pack reuse validation.",
+                              "group_dimensions":  [
+                                                       "occfld",
+                                                       "community",
+                                                       "force_element"
+                                                   ]
+                          },
+    "career_cells":  [
+                         {
+                             "cell_id":  "0311-E3",
+                             "specialty":  "0311",
+                             "grade":  "E3",
+                             "groups":  {
+                                            "occfld":  "03",
+                                            "community":  "infantry",
+                                            "force_element":  "gce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "0311-E4",
+                             "specialty":  "0311",
+                             "grade":  "E4",
+                             "groups":  {
+                                            "occfld":  "03",
+                                            "community":  "infantry",
+                                            "force_element":  "gce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "0369-E5",
+                             "specialty":  "0369",
+                             "grade":  "E5",
+                             "groups":  {
+                                            "occfld":  "03",
+                                            "community":  "infantry-leadership",
+                                            "force_element":  "gce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "0369-E6",
+                             "specialty":  "0369",
+                             "grade":  "E6",
+                             "groups":  {
+                                            "occfld":  "03",
+                                            "community":  "infantry-leadership",
+                                            "force_element":  "gce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "1721-E4",
+                             "specialty":  "1721",
+                             "grade":  "E4",
+                             "groups":  {
+                                            "occfld":  "17",
+                                            "community":  "cyber",
+                                            "force_element":  "mig"
+                                        }
+                         },
+                         {
+                             "cell_id":  "1721-E5",
+                             "specialty":  "1721",
+                             "grade":  "E5",
+                             "groups":  {
+                                            "occfld":  "17",
+                                            "community":  "cyber",
+                                            "force_element":  "mig"
+                                        }
+                         },
+                         {
+                             "cell_id":  "3531-E4",
+                             "specialty":  "3531",
+                             "grade":  "E4",
+                             "groups":  {
+                                            "occfld":  "35",
+                                            "community":  "motor-transport",
+                                            "force_element":  "lce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "3531-E5",
+                             "specialty":  "3531",
+                             "grade":  "E5",
+                             "groups":  {
+                                            "occfld":  "35",
+                                            "community":  "motor-transport",
+                                            "force_element":  "lce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "6174-E4",
+                             "specialty":  "6174",
+                             "grade":  "E4",
+                             "groups":  {
+                                            "occfld":  "61",
+                                            "community":  "aviation-maintenance",
+                                            "force_element":  "ace"
+                                        }
+                         },
+                         {
+                             "cell_id":  "6174-E5",
+                             "specialty":  "6174",
+                             "grade":  "E5",
+                             "groups":  {
+                                            "occfld":  "61",
+                                            "community":  "aviation-maintenance",
+                                            "force_element":  "ace"
+                                        }
+                         },
+                         {
+                             "cell_id":  "0621-E4",
+                             "specialty":  "0621",
+                             "grade":  "E4",
+                             "groups":  {
+                                            "occfld":  "06",
+                                            "community":  "communications",
+                                            "force_element":  "ce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "0621-E5",
+                             "specialty":  "0621",
+                             "grade":  "E5",
+                             "groups":  {
+                                            "occfld":  "06",
+                                            "community":  "communications",
+                                            "force_element":  "ce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "0369-E7",
+                             "specialty":  "0369",
+                             "grade":  "E7",
+                             "groups":  {
+                                            "occfld":  "03",
+                                            "community":  "infantry-leadership",
+                                            "force_element":  "gce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "1721-E6",
+                             "specialty":  "1721",
+                             "grade":  "E6",
+                             "groups":  {
+                                            "occfld":  "17",
+                                            "community":  "cyber",
+                                            "force_element":  "mig"
+                                        }
+                         },
+                         {
+                             "cell_id":  "3531-E6",
+                             "specialty":  "3531",
+                             "grade":  "E6",
+                             "groups":  {
+                                            "occfld":  "35",
+                                            "community":  "motor-transport",
+                                            "force_element":  "lce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "6174-E6",
+                             "specialty":  "6174",
+                             "grade":  "E6",
+                             "groups":  {
+                                            "occfld":  "61",
+                                            "community":  "aviation-maintenance",
+                                            "force_element":  "ace"
+                                        }
+                         },
+                         {
+                             "cell_id":  "0621-E6",
+                             "specialty":  "0621",
+                             "grade":  "E6",
+                             "groups":  {
+                                            "occfld":  "06",
+                                            "community":  "communications",
+                                            "force_element":  "ce"
+                                        }
+                         },
+                         {
+                             "cell_id":  "1721-E7",
+                             "specialty":  "1721",
+                             "grade":  "E7",
+                             "groups":  {
+                                            "occfld":  "17",
+                                            "community":  "cyber",
+                                            "force_element":  "mig"
+                                        }
+                         },
+                         {
+                             "cell_id":  "6174-E7",
+                             "specialty":  "6174",
+                             "grade":  "E7",
+                             "groups":  {
+                                            "occfld":  "61",
+                                            "community":  "aviation-maintenance",
+                                            "force_element":  "ace"
+                                        }
+                         }
+                     ],
+    "transitions":  [
+                        {
+                            "transition_id":  "acc-0311-e3",
+                            "transition_type":  "accession",
+                            "target_cell_id":  "0311-E3",
+                            "amount":  40
+                        },
+                        {
+                            "transition_id":  "prom-0311-e3-e4",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "0311-E3",
+                            "target_cell_id":  "0311-E4",
+                            "rate":  0.09
+                        },
+                        {
+                            "transition_id":  "prom-0311-e4-0369-e5",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "0311-E4",
+                            "target_cell_id":  "0369-E5",
+                            "rate":  0.08
+                        },
+                        {
+                            "transition_id":  "prom-0369-e5-e6",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "0369-E5",
+                            "target_cell_id":  "0369-E6",
+                            "rate":  0.06
+                        },
+                        {
+                            "transition_id":  "acc-1721-e4",
+                            "transition_type":  "accession",
+                            "target_cell_id":  "1721-E4",
+                            "amount":  8
+                        },
+                        {
+                            "transition_id":  "prom-1721-e4-e5",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "1721-E4",
+                            "target_cell_id":  "1721-E5",
+                            "rate":  0.12
+                        },
+                        {
+                            "transition_id":  "acc-3531-e4",
+                            "transition_type":  "accession",
+                            "target_cell_id":  "3531-E4",
+                            "amount":  10
+                        },
+                        {
+                            "transition_id":  "prom-3531-e4-e5",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "3531-E4",
+                            "target_cell_id":  "3531-E5",
+                            "rate":  0.1
+                        },
+                        {
+                            "transition_id":  "loss-0311-e3",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "0311-E3",
+                            "rate":  0.05
+                        },
+                        {
+                            "transition_id":  "loss-0311-e4",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "0311-E4",
+                            "rate":  0.04
+                        },
+                        {
+                            "transition_id":  "loss-0369-e5",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "0369-E5",
+                            "rate":  0.04
+                        },
+                        {
+                            "transition_id":  "loss-0369-e6",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "0369-E6",
+                            "rate":  0.03
+                        },
+                        {
+                            "transition_id":  "loss-1721-e4",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "1721-E4",
+                            "rate":  0.06
+                        },
+                        {
+                            "transition_id":  "loss-1721-e5",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "1721-E5",
+                            "rate":  0.05
+                        },
+                        {
+                            "transition_id":  "loss-3531-e4",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "3531-E4",
+                            "rate":  0.05
+                        },
+                        {
+                            "transition_id":  "loss-3531-e5",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "3531-E5",
+                            "rate":  0.04
+                        },
+                        {
+                            "transition_id":  "acc-6174-e4",
+                            "transition_type":  "accession",
+                            "target_cell_id":  "6174-E4",
+                            "amount":  12
+                        },
+                        {
+                            "transition_id":  "prom-6174-e4-e5",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "6174-E4",
+                            "target_cell_id":  "6174-E5",
+                            "rate":  0.11
+                        },
+                        {
+                            "transition_id":  "acc-0621-e4",
+                            "transition_type":  "accession",
+                            "target_cell_id":  "0621-E4",
+                            "amount":  9
+                        },
+                        {
+                            "transition_id":  "prom-0621-e4-e5",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "0621-E4",
+                            "target_cell_id":  "0621-E5",
+                            "rate":  0.09
+                        },
+                        {
+                            "transition_id":  "loss-6174-e4",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "6174-E4",
+                            "rate":  0.05
+                        },
+                        {
+                            "transition_id":  "loss-6174-e5",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "6174-E5",
+                            "rate":  0.04
+                        },
+                        {
+                            "transition_id":  "loss-0621-e4",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "0621-E4",
+                            "rate":  0.05
+                        },
+                        {
+                            "transition_id":  "loss-0621-e5",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "0621-E5",
+                            "rate":  0.04
+                        },
+                        {
+                            "transition_id":  "prom-0369-e6-e7",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "0369-E6",
+                            "target_cell_id":  "0369-E7",
+                            "rate":  0.05
+                        },
+                        {
+                            "transition_id":  "prom-1721-e5-e6",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "1721-E5",
+                            "target_cell_id":  "1721-E6",
+                            "rate":  0.1
+                        },
+                        {
+                            "transition_id":  "prom-3531-e5-e6",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "3531-E5",
+                            "target_cell_id":  "3531-E6",
+                            "rate":  0.08
+                        },
+                        {
+                            "transition_id":  "prom-6174-e5-e6",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "6174-E5",
+                            "target_cell_id":  "6174-E6",
+                            "rate":  0.09
+                        },
+                        {
+                            "transition_id":  "prom-0621-e5-e6",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "0621-E5",
+                            "target_cell_id":  "0621-E6",
+                            "rate":  0.08
+                        },
+                        {
+                            "transition_id":  "loss-0369-e7",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "0369-E7",
+                            "rate":  0.03
+                        },
+                        {
+                            "transition_id":  "loss-1721-e6",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "1721-E6",
+                            "rate":  0.04
+                        },
+                        {
+                            "transition_id":  "loss-3531-e6",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "3531-E6",
+                            "rate":  0.03
+                        },
+                        {
+                            "transition_id":  "loss-6174-e6",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "6174-E6",
+                            "rate":  0.03
+                        },
+                        {
+                            "transition_id":  "loss-0621-e6",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "0621-E6",
+                            "rate":  0.03
+                        },
+                        {
+                            "transition_id":  "prom-1721-e6-e7",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "1721-E6",
+                            "target_cell_id":  "1721-E7",
+                            "rate":  0.06
+                        },
+                        {
+                            "transition_id":  "prom-6174-e6-e7",
+                            "transition_type":  "promotion",
+                            "source_cell_id":  "6174-E6",
+                            "target_cell_id":  "6174-E7",
+                            "rate":  0.06
+                        },
+                        {
+                            "transition_id":  "loss-1721-e7",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "1721-E7",
+                            "rate":  0.03
+                        },
+                        {
+                            "transition_id":  "loss-6174-e7",
+                            "transition_type":  "loss",
+                            "source_cell_id":  "6174-E7",
+                            "rate":  0.03
+                        }
+                    ]
+}

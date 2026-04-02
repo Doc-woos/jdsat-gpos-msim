@@ -1,0 +1,15 @@
+{
+  "name": "msim-doc-tools",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Local documentation tooling for MSim diagrams",
+  "scripts": {
+    "docs:render-diagrams": "powershell -ExecutionPolicy Bypass -File scripts/render_diagrams.ps1",
+    "deps:bootstrap": "powershell -ExecutionPolicy Bypass -File scripts/bootstrap_dev.ps1",
+    "deps:verify-gameplan": "powershell -ExecutionPolicy Bypass -File scripts/verify_gameplan_dependency.ps1",
+    "validate": "powershell -ExecutionPolicy Bypass -File scripts/validate_repo.ps1"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^11.6.0"
+  }
+}

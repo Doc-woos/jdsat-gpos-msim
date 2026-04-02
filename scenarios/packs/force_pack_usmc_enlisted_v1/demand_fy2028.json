@@ -1,0 +1,86 @@
+{
+    "artifact_metadata":  {
+                              "artifact_id":  "demand_usmc_enlisted_fy2028_v1",
+                              "pack_id":  "force_pack_usmc_enlisted_v1",
+                              "service":  "USMC",
+                              "snapshot":  "FY2028"
+                          },
+    "demand":  [
+                   {
+                       "cell_id":  "0311-E3",
+                       "demand":  600
+                   },
+                   {
+                       "cell_id":  "0311-E4",
+                       "demand":  300
+                   },
+                   {
+                       "cell_id":  "0369-E5",
+                       "demand":  120
+                   },
+                   {
+                       "cell_id":  "0369-E6",
+                       "demand":  50
+                   },
+                   {
+                       "cell_id":  "1721-E4",
+                       "demand":  46
+                   },
+                   {
+                       "cell_id":  "1721-E5",
+                       "demand":  26
+                   },
+                   {
+                       "cell_id":  "3531-E4",
+                       "demand":  95
+                   },
+                   {
+                       "cell_id":  "3531-E5",
+                       "demand":  44
+                   },
+                   {
+                       "cell_id":  "6174-E4",
+                       "demand":  100
+                   },
+                   {
+                       "cell_id":  "6174-E5",
+                       "demand":  46
+                   },
+                   {
+                       "cell_id":  "0621-E4",
+                       "demand":  92
+                   },
+                   {
+                       "cell_id":  "0621-E5",
+                       "demand":  42
+                   },
+                   {
+                       "cell_id":  "0369-E7",
+                       "demand":  22
+                   },
+                   {
+                       "cell_id":  "1721-E6",
+                       "demand":  14
+                   },
+                   {
+                       "cell_id":  "3531-E6",
+                       "demand":  20
+                   },
+                   {
+                       "cell_id":  "6174-E6",
+                       "demand":  24
+                   },
+                   {
+                       "cell_id":  "0621-E6",
+                       "demand":  21
+                   },
+                   {
+                       "cell_id":  "1721-E7",
+                       "demand":  7
+                   },
+                   {
+                       "cell_id":  "6174-E7",
+                       "demand":  10
+                   }
+               ]
+}

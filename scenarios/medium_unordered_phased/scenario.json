@@ -1,0 +1,29 @@
+{
+  "scenario": {
+    "scenario_id": "medium-unordered-phased",
+    "horizon_years": 2,
+    "processing_rule": "phased_standard_v1",
+    "metadata": {
+      "version": "0.2.0",
+      "label": "Medium Unordered Phased",
+      "created_by": null,
+      "source": "decomposed-processing-rule-fixture",
+      "notes": "Decomposed medium scenario with scrambled transition order to verify processing-rule effects."
+    },
+    "scenario_refs": {
+      "topology": "topology.json",
+      "inventory": "inventory.json",
+      "demand": "demand.json",
+      "rates": "rate_tables.json",
+      "accessions": "accession_tables.json"
+    },
+    "policy_overrides": {
+      "rate_overrides": [],
+      "accession_overrides": []
+    },
+    "scenario_adjustments": {
+      "inventory_deltas": [],
+      "demand_deltas": []
+    }
+  }
+}

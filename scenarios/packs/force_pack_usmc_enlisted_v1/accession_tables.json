@@ -1,0 +1,41 @@
+{
+    "artifact_metadata":  {
+                              "artifact_id":  "accessions_usmc_enlisted_v1",
+                              "pack_id":  "force_pack_usmc_enlisted_v1",
+                              "service":  "USMC"
+                          },
+    "accession_table":  [
+                            {
+                                "entry_id":  "cyber-accession-year-3",
+                                "target_specialty":  "1721",
+                                "target_grade":  "E4",
+                                "year_start":  3,
+                                "year_end":  3,
+                                "amount":  10
+                            },
+                            {
+                                "entry_id":  "aviation-accession-year-3",
+                                "target_specialty":  "6174",
+                                "target_grade":  "E4",
+                                "year_start":  3,
+                                "year_end":  4,
+                                "amount":  14
+                            },
+                            {
+                                "entry_id":  "comms-accession-year-2",
+                                "target_specialty":  "0621",
+                                "target_grade":  "E4",
+                                "year_start":  2,
+                                "year_end":  3,
+                                "amount":  11
+                            },
+                            {
+                                "entry_id":  "cyber-accession-year-4",
+                                "target_specialty":  "1721",
+                                "target_grade":  "E4",
+                                "year_start":  4,
+                                "year_end":  4,
+                                "amount":  12
+                            }
+                        ]
+}
