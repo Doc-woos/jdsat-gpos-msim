@@ -1,13 +1,16 @@
 # Manpower Extraction Plan
 
 **Date:** 2026-03-26  
-**Status:** M2.2 and M2.4 baseline established; living plan for continued shared-package extraction
+**Status:** Historical extraction plan; current repo has been stabilized back onto app-local manpower logic because the referenced shared package path is not present in the current GamePlanOS checkout
 
 ## Purpose
 
-This document maps the standalone MSim boundary to the emerging shared `gameplan.domains.manpower` package.
+This document now serves two purposes:
 
-The extraction is no longer hypothetical. A first package scaffold now exists in `C:\dev\jdsat-gameplan-os`, and this repo now consumes the shared manpower models and pure helpers through thin local wrappers.
+- preserve the original extraction intent
+- record why the repo currently does not consume `gameplan.domains.manpower`
+
+The referenced shared package path is not present in the current `C:\dev\jdsat-gameplan-os` checkout. To keep the standalone app runnable and regression-covered, the pure manpower seam has been restored locally under `backend/domain/*`.
 
 ## Reference Baseline
 
@@ -27,16 +30,15 @@ python -m pytest tests -q
 
 The current split is now:
 
-- `gameplan.domains.manpower`: neutral manpower schemas, graph construction, projection-year logic, and policy application helpers
-- `backend/domain/*`: thin app-local wrappers over the shared package plus app-only provenance metadata, result, and artifact contracts; neutral shared types are aliased directly where the app does not need to extend them
+- `backend/domain/*`: app-local neutral manpower schemas, graph construction, projection-year logic, and policy application helpers
 - `backend/core/*`: orchestration, provenance, summaries, persistence, exports, and fixture loading
 - `backend/api/*`: HTTP request and response wiring
 
-This is the intended seam.
+This is the active seam.
 
 ## Extraction Goal
 
-Continue moving pure manpower semantics into the shared package while keeping this repo responsible for:
+If a real shared manpower package reappears later, move only the pure manpower semantics while keeping this repo responsible for:
 
 - app orchestration
 - HTTP contracts and routes
@@ -45,9 +47,9 @@ Continue moving pure manpower semantics into the shared package while keeping th
 - exports and persistence adapters
 - standalone repo bootstrapping and tooling
 
-## What Has Already Moved
+## What Previously Moved In Planning Only
 
-These responsibilities now have a shared-package home in `gameplan.domains.manpower`:
+These were the planned extraction candidates for `gameplan.domains.manpower`:
 
 - pure scenario schemas other than app-local provenance metadata, plus neutral algorithm-output schemas
 - processing-rule and transition-type literals
@@ -113,35 +115,16 @@ Stay repo-local because export envelopes, filenames, and CSV comment conventions
 
 Stay repo-local. No extraction value.
 
-## Shared Package Shape
+## Current Recovery Note
 
-The current shared package shape is:
+The repo has been recovered to a working state by keeping these pieces local:
 
-- `gameplan/domains/manpower/__init__.py`
-- `gameplan/domains/manpower/algorithms/models.py`
-- `gameplan/domains/manpower/algorithms/graph.py`
-- `gameplan/domains/manpower/algorithms/projection.py`
-- `gameplan/domains/manpower/algorithms/policy.py`
-- `gameplan/domains/manpower/tests/test_manpower.py`
-- `gameplan/domains/manpower/docs/*`
+- `backend/domain/models.py`
+- `backend/domain/graph_builder.py`
+- `backend/domain/projection.py`
+- `backend/domain/policy.py`
 
-Current public exports include:
-
-- `ProjectionScenario`
-- `CareerCell`
-- `Transition`
-- `RateTableEntry`
-- `RateOverride`
-- `AccessionTableEntry`
-- `AccessionOverride`
-- `ProjectedCell`
-- `ProjectionAggregate`
-- `ComparisonCellDelta`
-- `PolicySummary`
-- `build_career_flow_graph`
-- `run_projection_year`
-- `apply_policy_overrides`
-- `build_policy_summary`
+Those files now provide the deterministic manpower baseline directly, and the full test suite passes against that local seam.
 
 ## Remaining Extraction Sequence
 
@@ -154,11 +137,11 @@ Preserve dual-layer regression coverage:
 
 ### Step 2
 
-Keep this repo importing shared helpers behind the existing `backend/core/simulation.py` orchestration layer.
+Keep this repo importing shared helpers behind the existing `backend/core/simulation.py` orchestration layer only when those helpers actually exist in the reference source.
 
 ### Step 3
 
-Remove any remaining duplicated pure-domain definitions in this repo once parity stays proven.
+Remove any remaining duplicated pure-domain definitions in this repo only after a real replacement package path is present and parity stays proven.
 
 ### Step 4
 
@@ -175,15 +158,15 @@ Do not continue moving behavior into the shared package if any of these become t
 
 ## Current Gaps
 
-The current integration still leaves a few open questions:
+The current state still leaves a few open questions:
 
+- where a future shared manpower package should actually live in GamePlanOS
 - whether `PolicySummary` should remain a public shared type or become an internal helper return type later
 - whether graph node and edge payload dataclasses should stay public package types or become internal implementation details
-- how this standalone repo should consume GamePlanOS in development and CI without relying indefinitely on the local source-path shim
 
 ## Decision Recorded
 
-For current planning, the shared package should expose lower-level algorithm outputs, not the full app-facing `ProjectionResult` or `ProjectionComparison` envelopes.
+For current planning, any future shared package should expose lower-level algorithm outputs, not the full app-facing `ProjectionResult` or `ProjectionComparison` envelopes.
 
 This repo remains the owner of:
 

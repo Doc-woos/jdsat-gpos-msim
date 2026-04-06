@@ -11,8 +11,10 @@ It is grounded in:
 
 - the current repo structure and MVP slice
 - the local reference docs in this repo
-- the GamePlanOS MSim vision and reuse guidance in `C:\dev\jdsat-gameplan-os\apps\msim\docs\08-platform-vision.md`
-- `C:\dev\jdsat-gameplan-os\apps\msim\docs\09-platform-reuse-plan.md`
+- the currently available GamePlanOS package structure under `C:\dev\jdsat-gameplan-os`
+- local roadmap, checkpoint, and provenance notes in this repo
+
+Note: the previously referenced GamePlanOS files `C:\dev\jdsat-gameplan-os\apps\msim\docs\08-platform-vision.md` and `C:\dev\jdsat-gameplan-os\apps\msim\docs\09-platform-reuse-plan.md` are not present in the current checkout.
 
 This document distinguishes:
 
@@ -37,13 +39,15 @@ A concise implementation-to-vision summary now lives in `docs/current_state_vs_t
 This repo currently implements a narrow but useful foundation:
 
 - deterministic manpower projection
-- app-local result envelopes layered over shared `gameplan.domains.manpower` schemas
-- direct use of `gameplan.engine`, `gameplan.graph`, and the shared `gameplan.domains.manpower` package
+- app-local manpower domain types and deterministic projection logic under `backend/domain/`
+- app-local result envelopes layered over that local manpower seam
+- direct use of `gameplan.engine` and `gameplan.graph`
 - FastAPI endpoints for run, compare, export, compact summary export, export catalog, and local library persistence
 - static analyst workbench served by FastAPI
 - decomposed manifest-backed scenarios and reusable synthetic force packs
 - app-local grouped reporting by `occfld`, `community`, and `force_element`
 - grouped authorization/fill summaries and readiness pressure signals for named pack-backed scenarios
+- analyst takeaway strings, ranked watchlists, and explanation trails in API and export summaries
 - fixture-based tests that define the current stable contract
 - restart-oriented documentation including `docs/session_handoff.md` and the latest dated checkpoint
 
@@ -115,11 +119,12 @@ Create a clean extraction boundary for a shared manpower domain package while ke
 
 - refactor current manpower rules toward package-friendly pure functions
 - define interfaces for policy inputs, graph construction, and projection calculations
+- keep the standalone app functional until a shared package actually exists
 - consume the shared package once it exists without breaking the standalone app
 
 ### Build in GamePlanOS
 
-- continue hardening `gameplan.domains.manpower`
+- create and harden `gameplan.domains.manpower`
 - keep pure manpower algorithms and neutral schemas there
 - maintain package docs and pure-domain tests following existing domain-package patterns
 

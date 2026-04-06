@@ -80,7 +80,7 @@ def test_projection_export_uses_shared_naming_and_embeds_provenance_comments() -
     assert f"# scenario_fingerprint: {result.metadata.scenario_fingerprint}" in artifact.content
     assert f"# checkpoint_ref: {result.metadata.checkpoint_ref}" in artifact.content
     assert "# authorization_basis: none" in artifact.content
-    assert artifact.content.splitlines()[-1].startswith("0369-E5,")
+    assert "0369-E5,0369,E5,19,12,7" in artifact.content
 
 
 def test_named_projection_export_csv_includes_fill_and_readiness_sections() -> None:
@@ -96,6 +96,8 @@ def test_named_projection_export_csv_includes_fill_and_readiness_sections() -> N
     artifact = ProjectionExportService().export_projection(result, 'csv')
 
     assert '# authorization_basis: authorization' in artifact.content
+    assert '# section: watchlist' in artifact.content
+    assert '# section: explanations' in artifact.content
     assert '# section: fill_by_community' in artifact.content
     assert '# section: fill_by_force_element' in artifact.content
     assert '# section: readiness_signals' in artifact.content
@@ -119,6 +121,9 @@ def test_projection_summary_export_builds_compact_grouped_artifact() -> None:
     assert artifact.format == 'csv'
     assert '-summary-' in artifact.filename
     assert '# kind: projection_summary_export' in artifact.content
+    assert '# section: takeaways' in artifact.content
+    assert '# section: watchlist' in artifact.content
+    assert '# section: explanations' in artifact.content
     assert '# section: by_community' in artifact.content
     assert '# section: fill_by_community' in artifact.content
     assert '# section: readiness_signals' in artifact.content
@@ -165,7 +170,7 @@ def test_comparison_export_uses_shared_naming_and_embeds_variant_provenance() ->
     assert "# baseline_scenario_id: baseline-small" in artifact.content
     assert "# variant_scenario_id: baseline-boosted" in artifact.content
     assert f"# variant_fingerprint: {comparison.variant.metadata.scenario_fingerprint}" in artifact.content
-    assert artifact.content.splitlines()[-1].startswith("0369-E5,")
+    assert "0369-E5,19,19,7,7,0,0" in artifact.content
 
 
 def test_named_comparison_export_csv_includes_grouped_delta_sections() -> None:
@@ -187,6 +192,8 @@ def test_named_comparison_export_csv_includes_grouped_delta_sections() -> None:
     assert '# variant_authorization_basis: authorization' in artifact.content
     assert '# section: community_deltas' in artifact.content
     assert '# section: force_element_deltas' in artifact.content
+    assert '# section: watchlist' in artifact.content
+    assert '# section: explanations' in artifact.content
     assert '# section: baseline_fill_by_community' in artifact.content
     assert '# section: variant_fill_by_community' in artifact.content
     assert '# section: baseline_readiness_signals' in artifact.content
@@ -216,6 +223,9 @@ def test_comparison_summary_export_builds_compact_grouped_artifact() -> None:
     assert artifact.format == 'csv'
     assert '-summary-' in artifact.filename
     assert '# kind: comparison_summary_export' in artifact.content
+    assert '# section: takeaways' in artifact.content
+    assert '# section: watchlist' in artifact.content
+    assert '# section: explanations' in artifact.content
     assert '# section: policy_deltas' in artifact.content
     assert '# section: drivers' in artifact.content
     assert '# section: community_deltas' in artifact.content

@@ -9,11 +9,13 @@ The repo currently delivers a narrow but working Phase 0 seed:
 - deterministic manpower projection over a small scenario model
 - career-flow graph validation built on `gameplan.graph`
 - app-local orchestration that uses `gameplan.engine` as the simulation substrate seam
+- app-local manpower domain types and deterministic projection logic under `backend/domain/`
 - FastAPI endpoints for run, compare, export, and local library persistence
 - named scenario fixtures and analyst-facing scenario catalog metadata
 - export artifacts in JSON and CSV
 - file-backed local persistence under `workspace_data/`
 - a thin analyst workbench served by FastAPI
+- grouped authorization/fill summaries, readiness pressure signals, analyst takeaways, watchlists, and explanation trails
 - regression tests that define the current semantic baseline
 
 ## Target State
@@ -46,7 +48,7 @@ The target-state MSim vision is materially broader:
 - authoritative or live data adapters
 - full-force graph loading and calibration
 - `gameplan.data` integration replacing file-backed persistence
-- shared `gameplan.domains.manpower` package consumption
+- shared `gameplan.domains.manpower` package extraction and consumption
 - billet mapping and readiness summaries in the product
 - Monte Carlo, sensitivity, and optimization execution paths
 - AI tool orchestration over the simulation

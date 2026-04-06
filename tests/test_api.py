@@ -181,6 +181,9 @@ def test_projection_route_returns_stable_result_shape() -> None:
         {"key": "0311", "inventory": 139, "demand": 140, "gap": -1},
         {"key": "0369", "inventory": 19, "demand": 12, "gap": 7},
     ]
+    assert body["summary"]["takeaways"][0] == "Grouped fill and readiness views are unavailable for scenarios without pack reference context."
+    assert body["summary"]["watchlist"] == []
+    assert body["summary"]["explanations"][0]["title"] == "Top cell shortage: 0311-E3"
     assert body["summary"]["largest_shortages"][0]["cell_id"] == "0311-E3"
     assert body["summary"]["largest_overages"][0]["cell_id"] == "0369-E5"
 
@@ -270,6 +273,7 @@ def test_projection_summary_export_returns_compact_csv_artifact() -> None:
     assert artifact["format"] == "csv"
     assert artifact["filename"].startswith("baseline-small-summary-")
     assert "# kind: projection_summary_export" in artifact["content"]
+    assert "# section: explanations" in artifact["content"]
     assert "# section: by_grade" in artifact["content"]
 
 
@@ -851,6 +855,12 @@ def test_named_pack_backed_comparison_exposes_group_deltas_and_group_drivers() -
     assert mig['gap_delta'] > 0
     assert any(driver['title'] == 'Top Community Driver: cyber' for driver in summary['drivers'])
     assert any(driver['title'] == 'Top Force Element Driver: mig' for driver in summary['drivers'])
+    assert summary['takeaways'][0] == f'Both scenarios used {PHASED_RULE}.'
+    assert any('Strongest community shift is cyber' in item for item in summary['takeaways'])
+    assert summary['watchlist'][0]['title'] == 'community watch: cyber'
+    assert summary['watchlist'][0]['metric'] == 'gap_delta'
+    assert summary['explanations'][0]['title'] == 'Top community shift: cyber'
+    assert any('Linked force element: mig moved' in item for item in summary['explanations'][0]['reason_trail'])
 
 
 def test_named_pack_backed_comparison_exposes_authorization_basis() -> None:
@@ -933,6 +943,8 @@ def test_named_comparison_summary_export_returns_compact_csv_artifact() -> None:
     assert artifact['format'] == 'csv'
     assert artifact['filename'].startswith('synthetic-enlisted-baseline-vs-synthetic-enlisted-cyber-push-summary-')
     assert '# kind: comparison_summary_export' in artifact['content']
+    assert '# section: watchlist' in artifact['content']
+    assert '# section: explanations' in artifact['content']
     assert '# section: community_deltas' in artifact['content']
     assert '# section: baseline_fill_by_community' in artifact['content']
     assert '# section: variant_readiness_signals' in artifact['content']
@@ -1027,6 +1039,9 @@ def test_named_pack_backed_projection_exposes_authorization_basis() -> None:
     assert basis['source'] == 'authorization'
     assert basis['artifact_id'] == 'authorization_usmc_enlisted_fy2028_v1'
     assert 'explicit authorization data' in basis['description']
+    assert 'explicit authorization data' in response.json()['result']['summary']['takeaways'][0]
+    assert response.json()['result']['summary']['watchlist'][0]['group_type'] in {'community', 'force_element'}
+    assert response.json()['result']['summary']['explanations'][0]['title'].startswith('Top readiness pressure:')
 
 
 def test_inline_projection_keeps_fill_summaries_empty_without_reference_context() -> None:

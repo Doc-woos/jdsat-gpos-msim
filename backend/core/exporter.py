@@ -156,6 +156,9 @@ class ProjectionExportService:
             f"# processing_rule: {result.metadata.processing_rule}",
             f"# authorization_basis: {result.summary.authorization_basis.source}",
         ]
+        self._append_takeaway_section(lines, result.summary.takeaways)
+        self._append_watchlist_section(lines, result.summary.watchlist)
+        self._append_explanation_section(lines, result.summary.explanations)
         self._append_projection_aggregate_section(lines, "by_grade", result.summary.by_grade)
         self._append_projection_aggregate_section(lines, "by_specialty", result.summary.by_specialty)
         self._append_projection_aggregate_section(lines, "by_occfld", result.summary.by_occfld)
@@ -172,6 +175,9 @@ class ProjectionExportService:
             f"# baseline_authorization_basis: {comparison.summary.authorization_basis.baseline.source}",
             f"# variant_authorization_basis: {comparison.summary.authorization_basis.variant.source}",
         ]
+        self._append_takeaway_section(lines, comparison.summary.takeaways)
+        self._append_watchlist_section(lines, comparison.summary.watchlist)
+        self._append_explanation_section(lines, comparison.summary.explanations)
         self._append_policy_delta_section(lines, comparison.summary.policy_deltas)
         self._append_driver_section(lines, comparison.summary.drivers)
         self._append_aggregate_delta_section(lines, "occfld_deltas", comparison.summary.by_occfld)
@@ -215,12 +221,16 @@ class ProjectionExportService:
         return "\n".join(lines)
 
     def _append_projection_context_sections(self, lines: list[str], result: ProjectionResult) -> None:
+        self._append_watchlist_section(lines, result.summary.watchlist)
+        self._append_explanation_section(lines, result.summary.explanations)
         self._append_fill_summary_section(lines, "fill_by_occfld", result.summary.fill_by_occfld)
         self._append_fill_summary_section(lines, "fill_by_community", result.summary.fill_by_community)
         self._append_fill_summary_section(lines, "fill_by_force_element", result.summary.fill_by_force_element)
         self._append_readiness_signal_section(lines, result.summary.readiness_signals)
 
     def _append_comparison_context_sections(self, lines: list[str], comparison: ProjectionComparison) -> None:
+        self._append_watchlist_section(lines, comparison.summary.watchlist)
+        self._append_explanation_section(lines, comparison.summary.explanations)
         self._append_side_summary_sections(lines, "baseline", comparison.baseline)
         self._append_side_summary_sections(lines, "variant", comparison.variant)
 
@@ -261,6 +271,50 @@ class ProjectionExportService:
             detail = item.detail.replace(",", ";")
             title = item.title.replace(",", ";")
             lines.append(f"{item.kind},{title},{detail}")
+
+    @staticmethod
+    def _append_takeaway_section(lines: list[str], takeaways: list[str]) -> None:
+        if not takeaways:
+            return
+        lines.append("")
+        lines.append("# section: takeaways")
+        lines.append("order,takeaway")
+        for index, takeaway in enumerate(takeaways, start=1):
+            safe_takeaway = takeaway.replace(",", ";")
+            lines.append(f"{index},{safe_takeaway}")
+
+    @staticmethod
+    def _append_explanation_section(lines: list[str], explanations: list) -> None:
+        if not explanations:
+            return
+        lines.append("")
+        lines.append("# section: explanations")
+        lines.append("title,scope,group_type,key,reason_trail")
+        for item in explanations:
+            title = item.title.replace(",", ";")
+            scope = item.scope.replace(",", ";")
+            group_type = "" if item.group_type is None else item.group_type.replace(",", ";")
+            key = "" if item.key is None else item.key.replace(",", ";")
+            reason_trail = " | ".join(reason.replace(",", ";") for reason in item.reason_trail)
+            lines.append(f"{title},{scope},{group_type},{key},{reason_trail}")
+
+    @staticmethod
+    def _append_watchlist_section(lines: list[str], watchlist: list) -> None:
+        if not watchlist:
+            return
+        lines.append("")
+        lines.append("# section: watchlist")
+        lines.append("title,scope,group_type,key,severity,metric,value,detail")
+        for item in watchlist:
+            title = item.title.replace(",", ";")
+            scope = item.scope.replace(",", ";")
+            group_type = item.group_type.replace(",", ";")
+            key = item.key.replace(",", ";")
+            severity = item.severity.replace(",", ";")
+            metric = item.metric.replace(",", ";")
+            value = item.value.replace(",", ";")
+            detail = item.detail.replace(",", ";")
+            lines.append(f"{title},{scope},{group_type},{key},{severity},{metric},{value},{detail}")
 
     @staticmethod
     def _append_aggregate_delta_section(lines: list[str], section_name: str, deltas: list) -> None:

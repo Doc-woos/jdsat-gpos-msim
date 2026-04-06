@@ -26,6 +26,11 @@ def test_build_projection_summary_aggregates_grade_and_specialty_views() -> None
     assert summary.fill_by_force_element == []
     assert summary.authorization_basis.source == "none"
     assert summary.readiness_signals == []
+    assert summary.watchlist == []
+    assert summary.takeaways[0] == "Grouped fill and readiness views are unavailable for scenarios without pack reference context."
+    assert "No grouped readiness pressure signals are currently active." in summary.takeaways
+    assert summary.explanations[0].title == "Top cell shortage: 0311-E3"
+    assert "Demand basis: cell demand is 12." in summary.explanations[0].reason_trail
     assert summary.largest_shortages[0].cell_id == "0311-E3"
     assert summary.largest_overages[0].cell_id == "1721-E3"
 
@@ -64,6 +69,17 @@ def test_build_projection_summary_aggregates_app_local_group_views_when_availabl
     assert summary.readiness_signals[0].group_type == "community"
     assert summary.readiness_signals[0].key == "infantry"
     assert summary.readiness_signals[0].status == "stressed"
+    assert summary.watchlist[0].title == "community watch: infantry"
+    assert summary.watchlist[0].value == "90%"
+    assert summary.watchlist[0].metric == "fill_rate"
+    assert summary.watchlist[0].severity == "stressed"
+    assert summary.takeaways[0] == "Grouped fill and readiness views fall back to demand as a proxy because no authorization artifact was provided."
+    assert "Top readiness pressure is community infantry at 90% fill with a -2 gap." in summary.takeaways
+    assert summary.explanations[0].title == "Top readiness pressure: community infantry"
+    assert "Demand basis: demand-proxy authorization." in summary.explanations[0].reason_trail
+    assert "Top linked force element: gce is -2 against authorization at 90% fill." in summary.explanations[0].reason_trail
+    assert summary.explanations[1].title == "Top cell shortage: 0311-E3"
+    assert "Contributing community: infantry is -2 against demand proxy." in summary.explanations[1].reason_trail
 
 
 def test_build_projection_summary_emits_critical_readiness_signal_for_low_fill_group() -> None:
@@ -86,6 +102,10 @@ def test_build_projection_summary_emits_critical_readiness_signal_for_low_fill_g
     assert summary.readiness_signals[0].key == "infantry"
     assert summary.readiness_signals[0].fill_rate == 0.4
     assert summary.readiness_signals[0].status == "critical"
+    assert summary.watchlist[0].severity == "critical"
+    assert summary.watchlist[0].value == "40%"
+    assert "Top readiness pressure is community infantry at 40% fill with a -12 gap." in summary.takeaways
+    assert "Dominant gap: -12 at 40% fill." in summary.explanations[0].reason_trail
 
 
 def test_build_projection_summary_prefers_explicit_authorization_over_demand_for_fill_views() -> None:
@@ -110,6 +130,9 @@ def test_build_projection_summary_prefers_explicit_authorization_over_demand_for
     assert summary.fill_by_community[0].fill_rate == 0.5
     assert summary.fill_by_community[0].status == "critical"
     assert summary.readiness_signals[0].demand == 20
+    assert summary.watchlist[0].detail == "infantry is -10 against authorization at 50% fill."
+    assert summary.takeaways[0] == "Grouped fill and readiness views use explicit authorization data from auth-pack-v1."
+    assert "Demand basis: explicit authorization from auth-pack-v1." in summary.explanations[0].reason_trail
 
 
 def test_build_comparison_summary_includes_group_deltas_and_group_drivers() -> None:
@@ -132,6 +155,7 @@ def test_build_comparison_summary_includes_group_deltas_and_group_drivers() -> N
             fill_by_force_element=[],
             authorization_basis={"source": "demand_proxy", "artifact_id": None, "description": "baseline demand proxy"},
             readiness_signals=[],
+            watchlist=[],
             largest_shortages=[],
             largest_overages=[],
         ),
@@ -166,6 +190,7 @@ def test_build_comparison_summary_includes_group_deltas_and_group_drivers() -> N
             fill_by_force_element=[],
             authorization_basis={"source": "authorization", "artifact_id": "auth-pack-v1", "description": "variant explicit auth"},
             readiness_signals=[],
+            watchlist=[],
             largest_shortages=[],
             largest_overages=[],
         ),
@@ -200,3 +225,13 @@ def test_build_comparison_summary_includes_group_deltas_and_group_drivers() -> N
     assert summary.by_force_element[0].gap_delta == 4
     assert any(driver.title == 'Top Community Driver: infantry' for driver in summary.drivers)
     assert any(driver.title == 'Top Force Element Driver: gce' for driver in summary.drivers)
+    assert summary.watchlist[0].title == 'community watch: infantry'
+    assert summary.watchlist[0].severity == 'improving'
+    assert summary.watchlist[0].value == '+4'
+    assert summary.takeaways[0] == 'Both scenarios used sequential_declared_order.'
+    assert 'mix authorization semantics' in summary.takeaways[1]
+    assert 'Strongest community shift is infantry with +4 inventory and +4 gap.' in summary.takeaways
+    assert summary.explanations[0].title == 'Top community shift: infantry'
+    assert 'Dominant change: +4 inventory and +4 gap.' in summary.explanations[0].reason_trail
+    assert 'Linked force element: gce moved +4 inventory and +4 gap.' in summary.explanations[0].reason_trail
+    assert 'Policy context: Rate Overrides changed from 0 to 1 (+1).' in summary.explanations[0].reason_trail

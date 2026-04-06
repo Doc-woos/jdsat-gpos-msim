@@ -9,10 +9,12 @@ The repo has moved beyond initial M3.1 scenario-shape groundwork into a stable a
 
 The current app can now:
 
-- run named pack-backed scenarios through the shared `gameplan.domains.manpower` seam
+- run named pack-backed scenarios through the repo-local manpower seam in `backend/domain/*`
 - summarize outcomes by `occfld`, `community`, and `force_element`
 - compare named scenarios with grouped deltas and grouped narrative drivers
 - compute grouped authorization/fill summaries and readiness pressure signals
+- derive concise analyst takeaways from grouped summary state for projection and comparison handoff
+- rank grouped watchlist items and explanation trails for projection risk and comparison hotspot review
 - preserve those grouped views in full exports, compact summary exports, saved records, and the analyst workbench
 
 This is still a grouped readiness proxy, not billet-level modeling.
@@ -25,8 +27,11 @@ This is still a grouped readiness proxy, not billet-level modeling.
 - projection CSV exports now include grouped fill/readiness sections when present
 - comparison CSV exports now include grouped delta sections plus baseline/variant grouped fill and readiness sections
 - compact summary export endpoints now exist for both projection and comparison flows
+- compact summary exports now include a dedicated takeaway section for analyst handoff
+- compact summary exports now include dedicated watchlist and explanation sections for analyst handoff
 - the workbench now exposes `Export Summary CSV` actions and a visible export catalog
 - result panels and export controls now explain which grouped sections a CSV will contain
+- result panels now surface analyst takeaways, ranked watchlists, and explanation trails ahead of detailed grouped views
 - API/export wiring was cleaned up so named scenario comparison/export flows reuse local helpers instead of repeating load/compare logic
 - export catalog definitions were moved into a shared app-local module
 - exporter section assembly was reduced to shared helper paths instead of repeating grouped fill/readiness logic in multiple methods
@@ -36,15 +41,16 @@ This is still a grouped readiness proxy, not billet-level modeling.
 
 Shared GamePlanOS package responsibilities:
 
-- neutral manpower schemas and algorithms in `gameplan.domains.manpower`
-- reusable engine/graph seams
+- reusable engine/graph seams where applicable
 
 Repo-local responsibilities:
 
+- manpower domain schemas and deterministic helpers in `backend/domain/*`
 - app-facing result envelopes and summary models
 - scenario-pack assembly and pack metadata/grouping context
 - provenance, exports, persistence, and API routes
 - analyst-facing grouped reporting and readiness proxy behavior
+- analyst-facing watchlist ranking and explanation wording
 - static workbench UX
 
 Still intentionally repo-local for now:

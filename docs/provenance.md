@@ -46,6 +46,9 @@ This repo is seeded from GamePlanOS references, not copied as a monorepo app.
 - Simulation orchestration consumes the same helpers so run metadata and saved-record metadata are derived from one source of truth.
 - Persistence and export adapters now share the same naming helpers, which keeps filenames and saved record paths aligned across JSON records and portable export artifacts.
 - Named comparison export and save paths now preserve app-local grouped deltas for pack-backed scenarios, so community and force-element comparison context survives in exported and persisted artifacts.
+- Repo-local analyst takeaways now live in `backend/core/summary.py` and are intentionally derived after simulation completes, so explanation wording remains outside any shared neutral manpower package boundary.
+- Repo-local watchlists and explanation trails also live in `backend/core/summary.py` and are derived after simulation completes, which keeps ranking and analyst interpretation outside the neutral manpower seam.
+- Compact projection and comparison summary CSVs now preserve watchlists, explanations, and takeaways through `backend/core/exporter.py`, which keeps grouped interpretation portable without moving analyst wording into shared algorithms.
 
 
 

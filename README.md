@@ -19,6 +19,7 @@ This repository is a standalone app repo, not a GamePlanOS monorepo workspace. T
 - scenario metadata, fingerprints, and run timestamps for auditability
 - JSON and CSV export artifacts for runs and comparisons
 - comparison storytelling with rule summaries, policy deltas, and outcome drivers
+- concise analyst takeaways, ranked watchlists, and explanation trails derived from grouped summaries for projection and comparison handoff
 - local workspace persistence for versioned scenario, run, and comparison records
 - explicit semantic provenance in API metadata
 - fixture discovery through the API
@@ -55,7 +56,7 @@ The workbench supports:
 - running named scenarios
 - comparing named scenarios
 - inspecting result metrics, metadata, and cell tables
-- reviewing comparison drivers that explain rule and policy differences
+- reviewing ranked grouped watchlists, explanation trails, and comparison drivers that explain rule and policy differences
 - exporting projection and comparison artifacts as JSON or CSV
 - saving scenario snapshots, runs, and comparisons into the local library
 - reviewing the current saved library index
@@ -84,6 +85,13 @@ Comparison responses now include:
 - `drivers`
 
 These fields explain whether the processing rule changed, how policy input counts differ between baseline and variant, and which cell-level outcome shifts were most material.
+
+Pack-backed grouped summaries also expose:
+
+- `watchlist`
+- `explanations`
+
+These fields rank the grouped risks or delta hotspots worth briefing first and capture a short reason trail for why they matter.
 
 ## Local Library
 
@@ -141,7 +149,11 @@ Scenarios may optionally include:
 `accession_table` replaces the base accession amount for matching cohorts in matching years. `accession_overrides` then apply signed additive deltas after that replacement step.
 ## GamePlanOS Dependency
 
-Preferred development setup is an editable install of the GamePlanOS reference repo rather than relying on `GAMEPLAN_SRC`.
+This repo currently depends on the GamePlanOS checkout for shared substrate packages such as `gameplan.engine` and `gameplan.graph`.
+
+The previously planned shared manpower package path, `gameplan.domains.manpower`, is not present in the current reference checkout. The deterministic manpower models, graph builder, policy helpers, and year-step execution therefore live in this repo under `backend/domain/*` until a real shared package exists again.
+
+Preferred development setup is still an editable install of the GamePlanOS reference repo rather than relying on `GAMEPLAN_SRC`.
 
 Recommended bootstrap command:
 
@@ -158,7 +170,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\install_gameplan_editable.ps1
 Fallback only:
 
 - set `GAMEPLAN_SRC` to the GamePlanOS source root if an editable install is not available
-- the app and tests will use that source-path shim only when `gameplan` is otherwise not importable
+- the app and tests will use that source-path shim only when `gameplan` is otherwise not importable for the shared substrate packages that still exist
 
 The reference repo path used during current development is:
 
@@ -210,6 +222,6 @@ For rendered vision diagrams, prefer the SVG artifacts in [docs/visuals.md](docs
 
 Project documentation starts at [docs/README.md](docs/README.md).
 
-For the fastest orientation, start with [docs/current_state_vs_target_state.md](docs/current_state_vs_target_state.md). For the current M2 handoff boundary, use [docs/manpower_extraction_plan.md](docs/manpower_extraction_plan.md).
+For the fastest orientation, start with [docs/current_state_vs_target_state.md](docs/current_state_vs_target_state.md). For the current boundary around local manpower logic and any future extraction, use [docs/manpower_extraction_plan.md](docs/manpower_extraction_plan.md).
 
 

@@ -165,7 +165,7 @@ function describeCatalogEntry(entry) {
   }
   const source = entry.source ? `Source: ${entry.source}. ` : "";
   const notes = entry.notes || "No analyst note recorded.";
-  return `${entry.label} · ${entry.processing_rule}. ${source}${notes}`;
+  return `${entry.label} - ${entry.processing_rule}. ${source}${notes}`;
 }
 
 function updateRunCatalogNote() {
@@ -185,7 +185,7 @@ function updateCompareCatalogNote() {
 function renderProjection(result) {
   state.projection = result;
   const label = result.metadata.scenario_metadata.label || result.scenario_id;
-  projectionTitle.textContent = `${label} · ${result.metadata.processing_rule}`;
+  projectionTitle.textContent = `${label} - ${result.metadata.processing_rule}`;
 
   projectionMetrics.replaceChildren(
     cloneMetric("Inventory", result.metrics.total_inventory),
@@ -198,6 +198,9 @@ function renderProjection(result) {
   projectionExportSummary.classList.remove("empty");
 
   projectionInsights.replaceChildren(
+    buildInsightCard("Analyst Takeaways", "Repo-local interpretation for grouped handoff", result.summary.takeaways),
+    buildWatchlistCard("Grouped Watchlist", "Ranked grouped risks to brief first", result.summary.watchlist),
+    buildExplanationCard("Grouped Explanations", "Why the top grouped signals and shortages look the way they do", result.summary.explanations),
     buildInsightCard("Grade Balance", "Grouped readiness by grade", result.summary.by_grade.map((item) => `${item.key}: ${item.inventory}/${item.demand} (${signed(item.gap)})`)),
     buildInsightCard("Specialty Balance", "Grouped readiness by specialty", result.summary.by_specialty.map((item) => `${item.key}: ${item.inventory}/${item.demand} (${signed(item.gap)})`)),
     buildInsightCard("Community Fill", communityFillSubtitle(result.summary.authorization_basis), fillSummaryLines(result.summary.fill_by_community), "negative"),
@@ -263,6 +266,9 @@ function renderComparison(comparison) {
   comparisonExportSummary.classList.remove("empty");
 
   comparisonInsights.replaceChildren(
+    buildInsightCard("Analyst Takeaways", "Repo-local interpretation for grouped comparison handoff", comparison.summary.takeaways),
+    buildWatchlistCard("Grouped Watchlist", "Ranked grouped deltas to review first", comparison.summary.watchlist),
+    buildExplanationCard("Grouped Explanations", "Why the top grouped deltas moved", comparison.summary.explanations),
     buildInsightCard("Rule Difference", comparison.summary.rule_change ? "Execution semantics changed" : "Execution semantics unchanged", [comparison.summary.rule_summary], comparison.summary.rule_change ? "positive" : null),
     buildInsightCard("Inventory Gains", "Largest cell increases", comparison.summary.largest_inventory_gains.map((item) => `${item.cell_id}: ${signed(item.inventory_delta)}`), "positive"),
     buildInsightCard("Inventory Losses", "Largest cell decreases", comparison.summary.largest_inventory_losses.map((item) => `${item.cell_id}: ${signed(item.inventory_delta)}`), "negative"),
@@ -281,6 +287,9 @@ function renderComparison(comparison) {
   comparisonTable.classList.remove("empty");
 
   const sections = [
+    buildHighlightCard("Takeaways", comparison.summary.takeaways),
+    buildWatchlistHighlightCard("Grouped Watchlist", comparison.summary.watchlist),
+    buildExplanationHighlightCard("Grouped Explanations", comparison.summary.explanations),
     buildHighlightCard("Rule Summary", [comparison.summary.rule_summary]),
     buildHighlightCard("Auth Basis", comparisonAuthorizationLines(comparison.summary.authorization_basis)),
     buildPolicyDeltaCard(comparison.summary.policy_deltas),
@@ -342,6 +351,16 @@ function buildInsightCard(title, subtitle, lines, tone = null) {
   return card;
 }
 
+function buildExplanationCard(title, subtitle, explanations, tone = null) {
+  const lines = explanations.map((item) => `${item.title}: ${item.reason_trail.join(" | ")}`);
+  return buildInsightCard(title, subtitle, lines, tone);
+}
+
+function buildWatchlistCard(title, subtitle, watchlist, tone = "negative") {
+  const lines = watchlist.map((item) => `${item.title}: ${item.value} ${item.metric} [${item.severity}]`);
+  return buildInsightCard(title, subtitle, lines, tone);
+}
+
 function buildPolicyDeltaCard(policyDeltas) {
   const lines = policyDeltas.map((item) => `${item.category}: ${item.baseline_count} -> ${item.variant_count} (${signed(item.delta)})`);
   return buildHighlightCard("Policy Deltas", lines);
@@ -354,6 +373,16 @@ function buildDriverCard(drivers) {
 
 function buildAggregateDeltaCard(title, deltas) {
   const lines = topAggregateLines(deltas, 6);
+  return buildHighlightCard(title, lines);
+}
+
+function buildExplanationHighlightCard(title, explanations) {
+  const lines = explanations.map((item) => `<strong>${item.title}</strong>: ${item.reason_trail.join(" | ")}`);
+  return buildHighlightCard(title, lines);
+}
+
+function buildWatchlistHighlightCard(title, watchlist) {
+  const lines = watchlist.map((item) => `<strong>${item.title}</strong>: ${item.detail}`);
   return buildHighlightCard(title, lines);
 }
 
@@ -472,11 +501,11 @@ function comparisonExportReadyMessage(artifact, format) {
 }
 
 function projectionSummaryExportReadyMessage(artifact) {
-  return `Exported ${artifact.filename} with compact grouped projection summaries.`;
+  return `Exported ${artifact.filename} with compact grouped projection summaries and explanation trails.`;
 }
 
 function comparisonSummaryExportReadyMessage(artifact) {
-  return `Exported ${artifact.filename} with compact grouped comparison summaries.`;
+  return `Exported ${artifact.filename} with compact grouped comparison summaries and explanation trails.`;
 }
 
 function projectionExportSummaryText(result) {
@@ -493,6 +522,12 @@ function projectionExportSummaryText(result) {
   if (result.summary.readiness_signals.length) {
     sections.push("readiness signals");
   }
+  if (result.summary.explanations.length) {
+    sections.push("grouped explanations");
+  }
+  if (result.summary.watchlist.length) {
+    sections.push("grouped watchlist");
+  }
   return `Projection CSV will include ${sections.join(", ")}. Authorization basis: ${summariseAuthorizationBasis(result.summary.authorization_basis)}.`;
 }
 
@@ -503,6 +538,12 @@ function comparisonExportSummaryText(comparison) {
   }
   if (comparison.baseline.summary.readiness_signals.length || comparison.variant.summary.readiness_signals.length) {
     sections.push("baseline and variant readiness signals");
+  }
+  if (comparison.summary.explanations.length) {
+    sections.push("grouped explanations");
+  }
+  if (comparison.summary.watchlist.length) {
+    sections.push("grouped watchlist");
   }
   return `${sections.join(", ")}. Baseline auth basis: ${summariseAuthorizationBasis(comparison.summary.authorization_basis.baseline)}. Variant auth basis: ${summariseAuthorizationBasis(comparison.summary.authorization_basis.variant)}.`;
 }
@@ -712,6 +753,7 @@ document.getElementById("export-comparison-csv").addEventListener("click", () =>
 document.getElementById("export-comparison-summary-csv").addEventListener("click", exportComparisonSummary);
 
 boot();
+
 
 
 

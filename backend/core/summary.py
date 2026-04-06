@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import defaultdict
 
 from backend.domain.models import (
+    AnalystExplanation,
     AuthorizationBasis,
     ComparisonAuthorizationBasis,
     ComparisonAggregateDelta,
@@ -19,6 +20,7 @@ from backend.domain.models import (
     ProjectionSummary,
     ProjectedCell,
     ReadinessSignal,
+    WatchlistItem,
 )
 
 
@@ -47,6 +49,26 @@ def build_projection_summary(
         authorization_source=authorization_source,
         authorization_artifact_id=authorization_artifact_id,
     )
+    takeaways = _build_projection_takeaways(
+        authorization_basis=authorization_basis,
+        readiness_signals=readiness_signals,
+        largest_shortages=largest_shortages,
+        largest_overages=largest_overages,
+    )
+    explanations = _build_projection_explanations(
+        authorization_basis=authorization_basis,
+        readiness_signals=readiness_signals,
+        largest_shortages=largest_shortages,
+        fill_by_community=fill_by_community,
+        fill_by_force_element=fill_by_force_element,
+        cell_groups=cell_groups,
+    )
+    watchlist = _build_projection_watchlist(
+        authorization_basis=authorization_basis,
+        readiness_signals=readiness_signals,
+        fill_by_community=fill_by_community,
+        fill_by_force_element=fill_by_force_element,
+    )
     return ProjectionSummary(
         by_grade=by_grade,
         by_specialty=by_specialty,
@@ -58,6 +80,9 @@ def build_projection_summary(
         fill_by_force_element=fill_by_force_element,
         authorization_basis=authorization_basis,
         readiness_signals=readiness_signals,
+        watchlist=watchlist,
+        takeaways=takeaways,
+        explanations=explanations,
         largest_shortages=largest_shortages,
         largest_overages=largest_overages,
     )
@@ -97,6 +122,28 @@ def build_comparison_summary(
         baseline_result.summary.authorization_basis,
         variant_result.summary.authorization_basis,
     )
+    takeaways = _build_comparison_takeaways(
+        baseline_result=baseline_result,
+        variant_result=variant_result,
+        rule_summary=rule_summary,
+        authorization_basis=authorization_basis,
+        community_deltas=community_deltas,
+        force_element_deltas=force_element_deltas,
+        policy_deltas=policy_deltas,
+    )
+    explanations = _build_comparison_explanations(
+        authorization_basis=authorization_basis,
+        rule_summary=rule_summary,
+        community_deltas=community_deltas,
+        force_element_deltas=force_element_deltas,
+        policy_deltas=policy_deltas,
+    )
+    watchlist = _build_comparison_watchlist(
+        authorization_basis=authorization_basis,
+        community_deltas=community_deltas,
+        force_element_deltas=force_element_deltas,
+        policy_deltas=policy_deltas,
+    )
     return ProjectionComparisonSummary(
         largest_inventory_gains=sorted(cell_deltas, key=lambda item: item.inventory_delta, reverse=True)[:3],
         largest_inventory_losses=sorted(cell_deltas, key=lambda item: item.inventory_delta)[:3],
@@ -118,6 +165,9 @@ def build_comparison_summary(
             community_deltas,
             force_element_deltas,
         ),
+        watchlist=watchlist,
+        takeaways=takeaways,
+        explanations=explanations,
     )
 
 
@@ -231,6 +281,156 @@ def _build_authorization_basis(
     )
 
 
+def _build_projection_takeaways(
+    authorization_basis: AuthorizationBasis,
+    readiness_signals: list[ReadinessSignal],
+    largest_shortages: list[ProjectedCell],
+    largest_overages: list[ProjectedCell],
+) -> list[str]:
+    takeaways: list[str] = [authorization_basis.description]
+    if readiness_signals:
+        top_signal = readiness_signals[0]
+        takeaways.append(
+            f"Top readiness pressure is {top_signal.group_type} {top_signal.key} at "
+            f"{round(top_signal.fill_rate * 100)}% fill with a {signed_int(top_signal.gap)} gap."
+        )
+    else:
+        takeaways.append("No grouped readiness pressure signals are currently active.")
+
+    if largest_shortages:
+        top_shortage = largest_shortages[0]
+        takeaways.append(
+            f"Largest cell shortage is {top_shortage.cell_id} at {top_shortage.inventory}/{top_shortage.demand} "
+            f"with a {signed_int(top_shortage.gap)} gap."
+        )
+    elif largest_overages:
+        top_overage = largest_overages[0]
+        takeaways.append(
+            f"Largest positive inventory cushion is {top_overage.cell_id} at {top_overage.inventory}/{top_overage.demand} "
+            f"with a {signed_int(top_overage.gap)} gap."
+        )
+    return takeaways
+
+
+def _build_projection_explanations(
+    authorization_basis: AuthorizationBasis,
+    readiness_signals: list[ReadinessSignal],
+    largest_shortages: list[ProjectedCell],
+    fill_by_community: list[FillSummary],
+    fill_by_force_element: list[FillSummary],
+    cell_groups: dict[str, dict[str, str]],
+) -> list[AnalystExplanation]:
+    explanations: list[AnalystExplanation] = []
+    if readiness_signals:
+        top_signal = readiness_signals[0]
+        explanations.append(
+            AnalystExplanation(
+                title=f"Top readiness pressure: {top_signal.group_type} {top_signal.key}",
+                scope="projection",
+                group_type=top_signal.group_type,
+                key=top_signal.key,
+                reason_trail=[
+                    f"Demand basis: {_authorization_basis_label(authorization_basis)}.",
+                    f"Dominant gap: {signed_int(top_signal.gap)} at {round(top_signal.fill_rate * 100)}% fill.",
+                    _linked_group_reason(
+                        signal=top_signal,
+                        fill_by_community=fill_by_community,
+                        fill_by_force_element=fill_by_force_element,
+                    ),
+                ],
+            )
+        )
+    if largest_shortages:
+        top_shortage = largest_shortages[0]
+        group_info = cell_groups.get(top_shortage.cell_id, {})
+        reasons = [
+            f"Demand basis: cell demand is {top_shortage.demand}.",
+            f"Dominant gap: {signed_int(top_shortage.gap)} at {top_shortage.inventory}/{top_shortage.demand}.",
+        ]
+        if group_info.get("community"):
+            related_community = _find_fill_summary(fill_by_community, group_info["community"])
+            if related_community is not None:
+                reasons.append(
+                    f"Contributing community: {group_info['community']} is {signed_int(related_community.gap)} "
+                    f"against {_authorization_noun(authorization_basis)}."
+                )
+        if group_info.get("force_element"):
+            related_force_element = _find_fill_summary(fill_by_force_element, group_info["force_element"])
+            if related_force_element is not None:
+                reasons.append(
+                    f"Contributing force element: {group_info['force_element']} is {signed_int(related_force_element.gap)} "
+                    f"against {_authorization_noun(authorization_basis)}."
+                )
+        explanations.append(
+            AnalystExplanation(
+                title=f"Top cell shortage: {top_shortage.cell_id}",
+                scope="projection",
+                group_type="cell",
+                key=top_shortage.cell_id,
+                reason_trail=reasons,
+            )
+        )
+    return explanations
+
+
+def _build_projection_watchlist(
+    authorization_basis: AuthorizationBasis,
+    readiness_signals: list[ReadinessSignal],
+    fill_by_community: list[FillSummary],
+    fill_by_force_element: list[FillSummary],
+) -> list[WatchlistItem]:
+    items: list[WatchlistItem] = []
+    for signal in readiness_signals[:3]:
+        items.append(
+            WatchlistItem(
+                title=f"{signal.group_type} watch: {signal.key}",
+                scope="projection",
+                group_type=signal.group_type,
+                key=signal.key,
+                severity=signal.status,
+                metric="fill_rate",
+                value=f"{round(signal.fill_rate * 100)}%",
+                detail=(
+                    f"{signal.key} is {signed_int(signal.gap)} against {_authorization_noun(authorization_basis)} "
+                    f"at {round(signal.fill_rate * 100)}% fill."
+                ),
+            )
+        )
+    for summary in _top_negative_fill_summaries(fill_by_community, limit=2):
+        items.append(
+            WatchlistItem(
+                title=f"community watch: {summary.key}",
+                scope="projection",
+                group_type="community",
+                key=summary.key,
+                severity=summary.status,
+                metric="gap",
+                value=signed_int(summary.gap),
+                detail=(
+                    f"{summary.key} is {signed_int(summary.gap)} against {_authorization_noun(authorization_basis)} "
+                    f"with {round(summary.fill_rate * 100)}% fill."
+                ),
+            )
+        )
+    for summary in _top_negative_fill_summaries(fill_by_force_element, limit=2):
+        items.append(
+            WatchlistItem(
+                title=f"force_element watch: {summary.key}",
+                scope="projection",
+                group_type="force_element",
+                key=summary.key,
+                severity=summary.status,
+                metric="gap",
+                value=signed_int(summary.gap),
+                detail=(
+                    f"{summary.key} is {signed_int(summary.gap)} against {_authorization_noun(authorization_basis)} "
+                    f"with {round(summary.fill_rate * 100)}% fill."
+                ),
+            )
+        )
+    return _dedupe_watchlist(items)
+
+
 def _build_comparison_authorization_basis(
     baseline_basis: AuthorizationBasis,
     variant_basis: AuthorizationBasis,
@@ -259,12 +459,252 @@ def _build_comparison_authorization_basis(
     )
 
 
+def _build_comparison_takeaways(
+    baseline_result: ProjectionResult,
+    variant_result: ProjectionResult,
+    rule_summary: str,
+    authorization_basis: ComparisonAuthorizationBasis,
+    community_deltas: list[ComparisonAggregateDelta],
+    force_element_deltas: list[ComparisonAggregateDelta],
+    policy_deltas: list[PolicyDelta],
+) -> list[str]:
+    takeaways = [rule_summary, authorization_basis.description]
+    strongest_community = _select_strongest_aggregate_delta(community_deltas)
+    if strongest_community is not None:
+        takeaways.append(
+            f"Strongest community shift is {strongest_community.key} with "
+            f"{signed_int(strongest_community.inventory_delta)} inventory and "
+            f"{signed_int(strongest_community.gap_delta)} gap."
+        )
+    strongest_force_element = _select_strongest_aggregate_delta(force_element_deltas)
+    if strongest_force_element is not None:
+        takeaways.append(
+            f"Strongest force-element shift is {strongest_force_element.key} with "
+            f"{signed_int(strongest_force_element.inventory_delta)} inventory and "
+            f"{signed_int(strongest_force_element.gap_delta)} gap."
+        )
+    changed_policies = [delta for delta in policy_deltas if delta.delta != 0]
+    if changed_policies:
+        first_policy = changed_policies[0]
+        takeaways.append(
+            f"Primary policy count change is {first_policy.category}: "
+            f"{first_policy.baseline_count} to {first_policy.variant_count} "
+            f"({signed_int(first_policy.delta)})."
+        )
+    elif baseline_result.metrics.total_inventory == variant_result.metrics.total_inventory and baseline_result.metrics.total_gap == variant_result.metrics.total_gap:
+        takeaways.append("Baseline and variant totals are unchanged, so differences are limited to distribution or metadata.")
+    return takeaways
+
+
+def _build_comparison_explanations(
+    authorization_basis: ComparisonAuthorizationBasis,
+    rule_summary: str,
+    community_deltas: list[ComparisonAggregateDelta],
+    force_element_deltas: list[ComparisonAggregateDelta],
+    policy_deltas: list[PolicyDelta],
+) -> list[AnalystExplanation]:
+    explanations: list[AnalystExplanation] = []
+    strongest_community = _select_strongest_aggregate_delta(community_deltas)
+    strongest_force_element = _select_strongest_aggregate_delta(force_element_deltas)
+    leading_policy = next((delta for delta in policy_deltas if delta.delta != 0), None)
+    if strongest_community is not None:
+        reasons = [
+            f"Authorization basis: {authorization_basis.description}",
+            f"Dominant change: {signed_int(strongest_community.inventory_delta)} inventory and {signed_int(strongest_community.gap_delta)} gap.",
+            _linked_delta_reason("force element", strongest_force_element),
+        ]
+        if leading_policy is not None:
+            reasons.append(_policy_delta_reason(leading_policy))
+        else:
+            reasons.append(rule_summary)
+        explanations.append(
+            AnalystExplanation(
+                title=f"Top community shift: {strongest_community.key}",
+                scope="comparison",
+                group_type="community",
+                key=strongest_community.key,
+                reason_trail=reasons,
+            )
+        )
+    if strongest_force_element is not None:
+        reasons = [
+            f"Authorization basis: {authorization_basis.description}",
+            f"Dominant change: {signed_int(strongest_force_element.inventory_delta)} inventory and {signed_int(strongest_force_element.gap_delta)} gap.",
+            _linked_delta_reason("community", strongest_community),
+        ]
+        if leading_policy is not None:
+            reasons.append(_policy_delta_reason(leading_policy))
+        else:
+            reasons.append(rule_summary)
+        explanations.append(
+            AnalystExplanation(
+                title=f"Top force-element shift: {strongest_force_element.key}",
+                scope="comparison",
+                group_type="force_element",
+                key=strongest_force_element.key,
+                reason_trail=reasons,
+            )
+        )
+    return explanations
+
+
+def _build_comparison_watchlist(
+    authorization_basis: ComparisonAuthorizationBasis,
+    community_deltas: list[ComparisonAggregateDelta],
+    force_element_deltas: list[ComparisonAggregateDelta],
+    policy_deltas: list[PolicyDelta],
+) -> list[WatchlistItem]:
+    items: list[WatchlistItem] = []
+    for delta in _top_delta_watchlist_items(community_deltas, "community", authorization_basis.description):
+        items.append(delta)
+    for delta in _top_delta_watchlist_items(force_element_deltas, "force_element", authorization_basis.description):
+        items.append(delta)
+    for policy_delta in [item for item in policy_deltas if item.delta != 0][:2]:
+        items.append(
+            WatchlistItem(
+                title=f"policy watch: {policy_delta.category}",
+                scope="comparison",
+                group_type="policy",
+                key=policy_delta.category,
+                severity="changed",
+                metric="delta",
+                value=signed_int(policy_delta.delta),
+                detail=(
+                    f"{policy_delta.category} changed from {policy_delta.baseline_count} to "
+                    f"{policy_delta.variant_count} ({signed_int(policy_delta.delta)})."
+                ),
+            )
+        )
+    return _dedupe_watchlist(items)
+
+
 def _classify_fill_status(fill_rate: float) -> str:
     if fill_rate < 0.85:
         return "critical"
     if fill_rate < 0.95:
         return "stressed"
     return "healthy"
+
+
+def signed_int(value: int) -> str:
+    return f"{value:+d}"
+
+
+def _authorization_basis_label(authorization_basis: AuthorizationBasis) -> str:
+    if authorization_basis.source == "authorization":
+        artifact_detail = authorization_basis.artifact_id or "explicit authorization"
+        return f"explicit authorization from {artifact_detail}"
+    if authorization_basis.source == "demand_proxy":
+        return "demand-proxy authorization"
+    return "unavailable grouped authorization context"
+
+
+def _authorization_noun(authorization_basis: AuthorizationBasis) -> str:
+    if authorization_basis.source == "authorization":
+        return "authorization"
+    if authorization_basis.source == "demand_proxy":
+        return "demand proxy"
+    return "group context"
+
+
+def _find_fill_summary(summaries: list[FillSummary], key: str) -> FillSummary | None:
+    for item in summaries:
+        if item.key == key:
+            return item
+    return None
+
+
+def _linked_group_reason(
+    signal: ReadinessSignal,
+    fill_by_community: list[FillSummary],
+    fill_by_force_element: list[FillSummary],
+) -> str:
+    if signal.group_type == "community":
+        linked = _select_strongest_fill_summary(fill_by_force_element)
+        if linked is not None:
+            return (
+                f"Top linked force element: {linked.key} is {signed_int(linked.gap)} "
+                f"against authorization at {round(linked.fill_rate * 100)}% fill."
+            )
+    if signal.group_type == "force_element":
+        linked = _select_strongest_fill_summary(fill_by_community)
+        if linked is not None:
+            return (
+                f"Top linked community: {linked.key} is {signed_int(linked.gap)} "
+                f"against authorization at {round(linked.fill_rate * 100)}% fill."
+            )
+    return "No linked grouped contributor stands out beyond the top signal."
+
+
+def _select_strongest_fill_summary(summaries: list[FillSummary]) -> FillSummary | None:
+    meaningful = [item for item in summaries if item.gap != 0]
+    if not meaningful:
+        return None
+    return sorted(meaningful, key=lambda item: (abs(item.gap), -item.fill_rate, item.key), reverse=True)[0]
+
+
+def _linked_delta_reason(group_label: str, delta: ComparisonAggregateDelta | None) -> str:
+    if delta is None:
+        return f"No linked {group_label} delta stands out."
+    return (
+        f"Linked {group_label}: {delta.key} moved {signed_int(delta.inventory_delta)} inventory "
+        f"and {signed_int(delta.gap_delta)} gap."
+    )
+
+
+def _policy_delta_reason(policy_delta: PolicyDelta) -> str:
+    return (
+        f"Policy context: {policy_delta.category} changed from {policy_delta.baseline_count} "
+        f"to {policy_delta.variant_count} ({signed_int(policy_delta.delta)})."
+    )
+
+
+def _top_negative_fill_summaries(summaries: list[FillSummary], limit: int) -> list[FillSummary]:
+    filtered = [item for item in summaries if item.gap < 0 or item.fill_rate < 0.95]
+    return sorted(filtered, key=lambda item: (item.fill_rate, item.gap, item.key))[:limit]
+
+
+def _top_delta_watchlist_items(
+    deltas: list[ComparisonAggregateDelta],
+    group_type: str,
+    authorization_description: str,
+) -> list[WatchlistItem]:
+    ranked = sorted(
+        [item for item in deltas if item.inventory_delta != 0 or item.gap_delta != 0],
+        key=lambda item: (abs(item.gap_delta), abs(item.inventory_delta), item.key),
+        reverse=True,
+    )[:2]
+    items: list[WatchlistItem] = []
+    for delta in ranked:
+        severity = "improving" if delta.gap_delta > 0 else "worsening"
+        items.append(
+            WatchlistItem(
+                title=f"{group_type} watch: {delta.key}",
+                scope="comparison",
+                group_type=group_type,
+                key=delta.key,
+                severity=severity,
+                metric="gap_delta",
+                value=signed_int(delta.gap_delta),
+                detail=(
+                    f"{delta.key} moved {signed_int(delta.inventory_delta)} inventory and "
+                    f"{signed_int(delta.gap_delta)} gap. {authorization_description}"
+                ),
+            )
+        )
+    return items
+
+
+def _dedupe_watchlist(items: list[WatchlistItem]) -> list[WatchlistItem]:
+    seen: set[tuple[str, str]] = set()
+    unique: list[WatchlistItem] = []
+    for item in items:
+        key = (item.group_type, item.key)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(item)
+    return unique[:5]
 
 
 def _build_aggregate_deltas(

@@ -9,11 +9,12 @@ MSim is now past the initial deterministic MVP stage and into an early analyst-u
 
 What is real now:
 
-- shared neutral manpower algorithms through `gameplan.domains.manpower`
+- app-local neutral manpower algorithms under `backend/domain/`
 - app-local projection and comparison flows over named scenarios and reusable synthetic packs
 - grouped rollups by `occfld`, `community`, and `force_element`
 - grouped authorization/fill summaries and readiness pressure signals for named pack-backed scenarios
 - full and compact export flows that preserve those grouped analyst views
+- analyst takeaway strings, ranked watchlists, and explanation trails in the API, exports, and static workbench
 - a static workbench that exposes those results and exports directly
 
 What is not real yet:
@@ -41,6 +42,7 @@ This captures the top-level story: scenario inputs feed projection, comparison, 
 ![Simulation / Policy / Data Separation](simulation_policy_data_separation.svg)
 
 This is the most important architecture boundary. Neutral manpower algorithms sit in the shared GamePlanOS seam. App-local provenance, summaries, exports, persistence, and workbench behavior stay here.
+This is the intended long-term architecture boundary. In the current verified repo state, neutral manpower algorithms still live locally under `backend/domain/` because the referenced shared `gameplan.domains.manpower` package is not present in the current `C:\dev\jdsat-gameplan-os` checkout.
 
 ### 3. Readiness Linkage
 
@@ -64,9 +66,10 @@ This remains the right user-facing frame: define or load a scenario, run or comp
 
 ### Simulation boundary
 
-- `gameplan.domains.manpower` owns neutral manpower types and algorithms
+- `backend/domain/` currently owns neutral manpower types and algorithms
 - this repo owns app-facing result envelopes such as `ProjectionResult` and `ProjectionComparison`
 - pack metadata and grouping semantics remain repo-local through scenario assembly and summary logic
+- `gameplan.engine` and `gameplan.graph` remain the active shared GamePlanOS dependencies in use
 
 ### Analyst-facing outputs
 
@@ -77,6 +80,8 @@ For named pack-backed runs, the app now exposes:
 - grouped readiness pressure signals
 - grouped comparison deltas
 - comparison drivers by community and force element
+- ranked grouped watchlist items for projection risk and comparison hotspots
+- explanation trails that capture demand basis, dominant gap/delta, and linked grouped contributors
 - authorization-basis provenance so the analyst can see whether the grouped view is grounded in explicit authorization data or a demand fallback
 
 ### Export and handoff state
@@ -115,6 +120,16 @@ Recommended sequence:
 2. treat grouped authorization/fill/readiness as the current analyst contract
 3. improve explanation, reporting, and handoff artifacts around that grouped contract
 4. only introduce billet-level inputs when there is a concrete schema and data plan worth locking in
+
+## Dependency Note
+
+The current `C:\dev\jdsat-gameplan-os` checkout does not contain `gameplan.domains.manpower`.
+
+That means the repo should currently be described as:
+
+- using local deterministic manpower domain logic
+- using GamePlanOS for the shared packages that do exist here
+- preserving a future extraction path into a shared manpower package once that package actually exists
 
 ## Restart References
 
